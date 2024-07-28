@@ -1,0 +1,5 @@
+*.xlsx
+*.exe
+**/EnvForSearcherCellsExcell
+*settings.ini
+*.json

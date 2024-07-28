@@ -1,26 +1,6 @@
 import os
 import sys
 import openpyxl
-# import configparser
-
-# path_settings_ini = "settings.ini"
-
-# if os.path.isfile(path_settings_ini):
-
-#     # Создаем settings.ini
-#     try:
-#         config = configparser.ConfigParser()
-#         config["DEFAULT"] = {
-#             "PathToXLSX": "/",  # Укажите путь к папке с Excel-файлами
-#             "": "",
-
-#         }
-#         with open('settings.ini', 'w') as configfile:
-#             config.write(configfile)
-#         print("Недостающие компоненты добавлены!")
-#     except FileExistsError:
-#         print('Проверка компонентов завершена..')
-
 
 # Укажите путь к папке с Excel-файлами
 folder_path = os.path.abspath(os.curdir)

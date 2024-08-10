@@ -3,13 +3,12 @@ import sys
 import openpyxl
 from tqdm import tqdm
 from prettytable import PrettyTable
-from time import sleep
 
 # Укажите путь к папке с Excel-файлами
 folder_path = os.path.abspath(os.curdir)
 
 # Подсказка для пользователей
-print("\nДля выхода из программы введите: searcher -stop\n")
+print("Для выхода из программы введите: searcher -stop")
 
 while True:
 
@@ -42,7 +41,6 @@ while True:
                         colour="#FFFF00",
                         ascii=True, leave=False
                         ):
-                    sleep(0.8)
                     sheet = workbook[sheet_name]
                     # Итерируемся по всем ячейкам в листе
                     for row in sheet.iter_rows():
@@ -69,5 +67,5 @@ while True:
         print("\nНайдены совпадения(в .xlsx файлах) с вашем значением: ")
         print(table)
     else:
-        print("Ячейка не найдена.")
-    print("|================================================================|\n")
+        print("\nДанное значение не обнаруженно в .xlsx файлах.")
+    print("|================================================================|")

@@ -5,22 +5,74 @@ from tqdm import tqdm
 from prettytable import PrettyTable
 from time import sleep
 
+
+version = "1.0"
+
 # Укажите путь к папке с Excel-файлами
 folder_path = os.path.abspath(os.curdir)
 
 # Подсказка для пользователей
-print("Для выхода из программы введите: searcher -stop")
+input_text = """Для того чтобы получить список команд,
+введите: 'searcher -help'."""
+
+
+def searcher_stop():
+    print("Досвидания. Запускайте еще!")
+    sleep(0.5)
+    sys.exit
+
+
+# Вывод команд для на консоль
+def searcher_help():
+    help_text = """Доступные команды:
+    searcher -stop: Выйти из программы
+    searcher -help: Показать этот список команд
+    searcher -hi: Приветствие
+    searcher -info: Информация о программе
+    """
+    print(help_text)
+
+
+def searcher_hi():
+    hi_text = """
+Добро пожаловать в SearcherCellsExcell!
+    Эта программа поможет вам быстро находить ячейки
+    с определёнными значениями в ваших Excel файлах.
+    Начните поиск и упростите свою работу с данными.
+    Удачи!
+    """
+    print(hi_text)
+
+
+def searcher_info():
+    info_text = f"""SearcherCellsExcell program information:
+|=======================================|
+    SearcherCellsExcell or SCE version: {version}
+    author: AAIgorevich
+    link GitHub author: https://github.com/AAIgorevich
+    """
+    print(info_text)
+
+
+print(input_text)
+
 
 while True:
-
     # Укажите значение, которое нужно найти
     search_value = str(input("Ваше значение: "))
 
     if search_value == "searcher -stop":
-        sleep(1)
-        print("Досвидания. Запускайте еще!")
-        sys.exit
+        searcher_stop()
         break
+    elif search_value == "searcher -help":
+        searcher_help()
+        continue
+    elif search_value == "searcher -hi":
+        searcher_hi()
+        continue
+    elif search_value == "searcher -info":
+        searcher_info()
+        continue
 
     def find_cell_by_value(folder_path, search_value: str):
         store_results = []  # Список для хранения результатов поиска

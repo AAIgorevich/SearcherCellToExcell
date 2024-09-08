@@ -3,6 +3,7 @@ import sys
 import openpyxl
 from tqdm import tqdm
 from prettytable import PrettyTable
+from time import sleep
 
 # Укажите путь к папке с Excel-файлами
 folder_path = os.path.abspath(os.curdir)
@@ -16,6 +17,7 @@ while True:
     search_value = str(input("Ваше значение: "))
 
     if search_value == "searcher -stop":
+        sleep(1)
         print("Досвидания. Запускайте еще!")
         sys.exit
         break

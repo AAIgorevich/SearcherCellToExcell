@@ -5,24 +5,24 @@ from tqdm import tqdm
 from prettytable import PrettyTable
 from time import sleep
 
-
 version = "1.0"
 
 # Укажите путь к папке с Excel-файлами
 folder_path = os.path.abspath(os.curdir)
 
-# Подсказка для пользователей
-input_text = """Для того чтобы получить список команд,
-введите: 'searcher -help'."""
+# Подсказка для пользователей выводится единожды
+def searcher_first_help():
+    input_text = """Для того чтобы получить список команд,
+    введите: 'searcher -help'."""
+    return print(input_text)
 
-
+# Остановка и выход из программы
 def searcher_stop():
     print("Досвидания. Запускайте еще!")
     sleep(0.5)
     sys.exit
 
-
-# Вывод команд для на консоль
+# Вывод всех имеющихся команд для на консоль
 def searcher_help():
     help_text = """Доступные команды:
     searcher -stop: Выйти из программы
@@ -32,7 +32,7 @@ def searcher_help():
     """
     print(help_text)
 
-
+# Приветствие на консоль
 def searcher_hi():
     hi_text = """
 Добро пожаловать в SearcherCellsExcell!
@@ -43,7 +43,7 @@ def searcher_hi():
     """
     print(hi_text)
 
-
+# Информациия о программе
 def searcher_info():
     info_text = f"""SearcherCellsExcell program information:
 |=======================================|
@@ -53,27 +53,28 @@ def searcher_info():
     """
     print(info_text)
 
-
-print(input_text)
-
+searcher_first_help()
 
 while True:
     # Укажите значение, которое нужно найти
     search_value = str(input("Ваше значение: "))
 
-    if search_value == "searcher -stop":
-        searcher_stop()
-        break
-    elif search_value == "searcher -help":
-        searcher_help()
-        continue
-    elif search_value == "searcher -hi":
-        searcher_hi()
-        continue
-    elif search_value == "searcher -info":
+    def searcher_commands():
+        if search_value == "searcher -stop":
+            searcher_stop()
+            break
+        elif search_value == "searcher -help":
+            searcher_help()
+            continue
+        elif search_value == "searcher -hi":
+            searcher_hi()
+            continue
+        elif search_value == "searcher -info":
         searcher_info()
         continue
-
+    
+    searcher_commands(search_value)
+    
     def find_cell_by_value(folder_path, search_value: str):
         store_results = []  # Список для хранения результатов поиска
 

@@ -43,7 +43,7 @@ class SCEComands:
     def command_sce_stop(self):
         print(self.stop_text)
         sleep(0.5)
-        sys.exit
+        sys.exit()
 
     # Вывод всех имеющихся команд для на консоль (помощь)
     def command_sce_help(self):
@@ -111,7 +111,9 @@ try:
                 if filename.endswith(".xlsx"):
                     file_path = os.path.join(folder_path, filename)
                     # Загружаем книгу Excel
-                    workbook = openpyxl.load_workbook(file_path, read_only=True)
+                    workbook = openpyxl.load_workbook(
+                        file_path, read_only=True
+                        )
                     # Итерируемся по всем листам книги
                     for sheet_name in tqdm(
                             workbook.sheetnames,
@@ -132,8 +134,8 @@ try:
                                     # файлу, имени листа и адреса ячейки
                                     store_results.append(
                                         [filename,
-                                        sheet.title,
-                                        cell.coordinate])
+                                         sheet.title,
+                                         cell.coordinate])
 
             # Возвращаем результаты поиска
             return store_results

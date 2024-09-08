@@ -10,11 +10,13 @@ version = "1.0"
 # Укажите путь к папке с Excel-файлами
 folder_path = os.path.abspath(os.curdir)
 
+
 # Подсказка для пользователей выводится единожды
 def searcher_first_help():
     input_text = """Для того чтобы получить список команд,
     введите: 'searcher -help'."""
     return print(input_text)
+
 
 # Остановка и выход из программы
 def searcher_stop():
@@ -22,7 +24,8 @@ def searcher_stop():
     sleep(0.5)
     sys.exit
 
-# Вывод всех имеющихся команд для на консоль
+
+# Вывод всех имеющихся команд для на консоль (помощь)
 def searcher_help():
     help_text = """Доступные команды:
     searcher -stop: Выйти из программы
@@ -31,6 +34,7 @@ def searcher_help():
     searcher -info: Информация о программе
     """
     print(help_text)
+
 
 # Приветствие на консоль
 def searcher_hi():
@@ -43,6 +47,7 @@ def searcher_hi():
     """
     print(hi_text)
 
+
 # Информациия о программе
 def searcher_info():
     info_text = f"""SearcherCellsExcell program information:
@@ -53,28 +58,37 @@ def searcher_info():
     """
     print(info_text)
 
+
+# Вызов команд
+def call_comands(search_value) -> str:
+    if search_value == "searcher -stop":
+        searcher_stop()
+        return "stop"
+    elif search_value == "searcher -help":
+        searcher_help()
+        return "continue"
+    elif search_value == "searcher -hi":
+        searcher_hi()
+        return "continue"
+    elif search_value == "searcher -info":
+        searcher_info()
+        return "continue"
+
+
 searcher_first_help()
 
 while True:
     # Укажите значение, которое нужно найти
     search_value = str(input("Ваше значение: "))
 
-    def searcher_commands():
-        if search_value == "searcher -stop":
-            searcher_stop()
-            break
-        elif search_value == "searcher -help":
-            searcher_help()
-            continue
-        elif search_value == "searcher -hi":
-            searcher_hi()
-            continue
-        elif search_value == "searcher -info":
-        searcher_info()
+    result = call_comands(search_value)
+
+    # Остановк или продолжение использование программы 
+    if result == "stop":
+        break
+    elif result == "continue":
         continue
-    
-    searcher_commands(search_value)
-    
+
     def find_cell_by_value(folder_path, search_value: str):
         store_results = []  # Список для хранения результатов поиска
 

@@ -43,26 +43,26 @@ class SCEComands:
     def command_sce_stop(self):
         print(self.stop_text)
         sleep(0.5)
-        sys.exit()
+        return sys.exit()
 
     # Вывод всех имеющихся команд для на консоль (помощь)
     def command_sce_help(self):
-        print(self.help_text)
+        return print(self.help_text)
 
     # Приветствие на консоль
     def command_sce_hi(self):
-        print(self.hi_text)
+        return print(self.hi_text)
 
     # Информациия о программе
     def command_sce_info(self):
-        print(self.info_text)
+        return print(self.info_text)
 
     # Подсказка для пользователей выводится единожды
     def first_init_command_help(self):
-        print(self.input_text)
+        return print(self.input_text)
 
     # Вызов команд
-    def call_comands(self, search_value) -> str:
+    def call_comands(self, search_value) -> str | None:
         if search_value == "searcher -stop":
             self.command_sce_stop()
             return "stop"
@@ -75,6 +75,8 @@ class SCEComands:
         elif search_value == "searcher -info":
             self.command_sce_info()
             return "continue"
+        # Если команда не распознана, возвращаем None, чтобы продолжить поиск
+        return None
 
 
 SCE = SCEComands()
@@ -98,6 +100,8 @@ try:
             break
         elif result == "continue":
             continue
+        elif result is None:
+            pass
 
         def find_cell_by_value(folder_path, search_value: str):
             store_results = []  # Список для хранения результатов поиска

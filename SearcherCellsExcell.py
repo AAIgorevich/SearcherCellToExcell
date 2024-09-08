@@ -6,7 +6,7 @@ from prettytable import PrettyTable
 from time import sleep
 import textwrap
 
-version = "1.0"
+version = "1.1"
 author = "AAIgorevich"
 
 

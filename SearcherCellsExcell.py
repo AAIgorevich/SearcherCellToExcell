@@ -4,86 +4,94 @@ import openpyxl
 from tqdm import tqdm
 from prettytable import PrettyTable
 from time import sleep
+import textwrap
 
 version = "1.0"
+author = "AAIgorevich"
+
+
+class SCEComands:
+    # data text commands
+    def __init__(self) -> None:
+        self.input_text = textwrap.dedent("""
+        Для того чтобы получить список команд,
+        введите: 'searcher -help'.""").strip()
+        self.stop_text = "Досвидания. Запускайте еще!"
+        self.help_text = textwrap.dedent("""
+        Доступные команды:
+        searcher -stop: Выйти из программы
+        searcher -help: Показать этот список команд
+        searcher -hi: Приветствие
+        searcher -info: Информация о программе
+        """).strip()
+        self.hi_text = textwrap.dedent("""
+        Добро пожаловать в SearcherCellsExcell!
+        Эта программа поможет вам быстро находить ячейки
+        с определёнными значениями в ваших Excel файлах.
+        Начните поиск и упростите свою работу с данными.
+        Удачи!
+        """).strip()
+        self.info_text = textwrap.dedent(f"""
+        SearcherCellsExcell program information:
+        =======================================
+        SearcherCellsExcell or SCE version: {version}
+        author: {author}
+        link GitHub author: https://github.com/{author}
+        """).strip()
+
+    # Остановка и выход из программы
+    def command_sce_stop(self):
+        print(self.stop_text)
+        sleep(0.5)
+        sys.exit
+
+    # Вывод всех имеющихся команд для на консоль (помощь)
+    def command_sce_help(self):
+        print(self.help_text)
+
+    # Приветствие на консоль
+    def command_sce_hi(self):
+        print(self.hi_text)
+
+    # Информациия о программе
+    def command_sce_info(self):
+        print(self.info_text)
+
+    # Подсказка для пользователей выводится единожды
+    def first_init_command_help(self):
+        print(self.input_text)
+
+    # Вызов команд
+    def call_comands(self, search_value) -> str:
+        if search_value == "searcher -stop":
+            self.command_sce_stop()
+            return "stop"
+        elif search_value == "searcher -help":
+            self.command_sce_help()
+            return "continue"
+        elif search_value == "searcher -hi":
+            self.command_sce_hi()
+            return "continue"
+        elif search_value == "searcher -info":
+            self.command_sce_info()
+            return "continue"
+
+
+SCE = SCEComands()
+
+SCE.first_init_command_help()
 
 # Укажите путь к папке с Excel-файлами
 folder_path = os.path.abspath(os.curdir)
-
-
-# Подсказка для пользователей выводится единожды
-def searcher_first_help():
-    input_text = """Для того чтобы получить список команд,
-    введите: 'searcher -help'."""
-    return print(input_text)
-
-
-# Остановка и выход из программы
-def searcher_stop():
-    print("Досвидания. Запускайте еще!")
-    sleep(0.5)
-    sys.exit
-
-
-# Вывод всех имеющихся команд для на консоль (помощь)
-def searcher_help():
-    help_text = """Доступные команды:
-    searcher -stop: Выйти из программы
-    searcher -help: Показать этот список команд
-    searcher -hi: Приветствие
-    searcher -info: Информация о программе
-    """
-    print(help_text)
-
-
-# Приветствие на консоль
-def searcher_hi():
-    hi_text = """
-Добро пожаловать в SearcherCellsExcell!
-    Эта программа поможет вам быстро находить ячейки
-    с определёнными значениями в ваших Excel файлах.
-    Начните поиск и упростите свою работу с данными.
-    Удачи!
-    """
-    print(hi_text)
-
-
-# Информациия о программе
-def searcher_info():
-    info_text = f"""SearcherCellsExcell program information:
-|=======================================|
-    SearcherCellsExcell or SCE version: {version}
-    author: AAIgorevich
-    link GitHub author: https://github.com/AAIgorevich
-    """
-    print(info_text)
-
-
-# Вызов команд
-def call_comands(search_value) -> str:
-    if search_value == "searcher -stop":
-        searcher_stop()
-        return "stop"
-    elif search_value == "searcher -help":
-        searcher_help()
-        return "continue"
-    elif search_value == "searcher -hi":
-        searcher_hi()
-        return "continue"
-    elif search_value == "searcher -info":
-        searcher_info()
-        return "continue"
-
-
-searcher_first_help()
 
 while True:
     # Укажите значение, которое нужно найти
     search_value = str(input("Ваше значение: "))
 
-    result = call_comands(search_value)
+    # Получение результата
+    result = SCE.call_comands(search_value)
 
-    # Остановк или продолжение использование программы 
+    # Остановка или продолжение использование программы
     if result == "stop":
         break
     elif result == "continue":
@@ -133,8 +141,8 @@ while True:
     for row in locations:
         table.add_row(row)
     if locations:
-        print("\nНайдены совпадения(в .xlsx файлах) с вашем значением: ")
+        print("\nНайдены совпадения в (.xlsx) файлах с вашем значением: ")
         print(table)
     else:
-        print("\nДанное значение не обнаруженно в .xlsx файлах.")
+        print("\nДанное значение не обнаруженно в (.xlsx) файлах.")
     print("|================================================================|")

@@ -5,9 +5,12 @@ from tqdm import tqdm
 from prettytable import PrettyTable
 from time import sleep
 import textwrap
+import configparser
+
 
 version = "1.1"
 author = "AAIgorevich"
+file_config_ini = ""
 
 
 class SCEComands:
@@ -118,12 +121,39 @@ class SCESomeFilesSearch:
 
 
 class FindCellByValue:
+
     def __init__(self) -> None:
         self.store_result = []  # Для
         self.files_and_path = {}
+        self.config = configparser.ConfigParser()
+
+    def try_read_config_and_write_in_dict(self):
+        try:
+            self.config.read(file_config_ini)
+            for section in self.config.sections():
+                path = self.config[section]["path"].strip("''")
+                files = self.config[section]["files"].split()
+                self.files_and_path = {
+                    "path": path,
+                    "files": files
+                }
+                return self.files_and_path
+        except Exception:
+            print("config файл отсутсвует!")
+            return self.files_and_path
+
+    def parse_dict_to_list(self):
+        file_path_dict = self.try_read_config_and_write_in_dict()
+        self.store_result = [
+            f"{group['path']}\\{file}"
+            for group in file_path_dict.values()
+            for file in group['files']
+        ]
+        return self.store_result
 
     def search_file(self):
-        pass
+        for filename in self.files_and_path:
+            ...
 
     def loop_init(self):
         try:

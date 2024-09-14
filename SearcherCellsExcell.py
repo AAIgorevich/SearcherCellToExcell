@@ -13,7 +13,7 @@ author = "AAIgorevich"
 class SCEComands:
     # data text commands
     def __init__(self) -> None:
-        self.SCE_greeting = textwrap.dedent("""
+        self.SCE_greeting = textwrap.dedent(r"""
         ╔══════════════════════════════╗
         ║        ┌/\───/\┐             ║
         ║        │  SCE  │             ║
@@ -113,6 +113,32 @@ class SCESomeFilesSearch:
     def extract_files_value(self):
         pass
 
+    def check_exctract_files(self):
+        pass
+
+
+class FindCellByValue:
+    def __init__(self) -> None:
+        self.store_result = []  # Для
+        self.files_and_path = {}
+
+    def search_file(self):
+        pass
+
+    def loop_init(self):
+        try:
+            while True:
+                input_search_value = str(input("Ваше значение: "))
+                result = SCE.call_comands(input_search_value)
+                if result == "stop":
+                    break
+                elif result == "continue":
+                    continue
+                elif result is None:
+                    pass
+                # ! <- Сюда ложим функции
+        except KeyboardInterrupt:
+            SCE.command_sce_stop()
 
 SCE = SCEComands()
 
@@ -127,10 +153,11 @@ try:
         # Укажите значение, которое нужно найти
         search_value = str(input("Ваше значение: "))
 
-        # Получение результата
+        # Получение результата комманды
         result = SCE.call_comands(search_value)
 
-        # Остановка или продолжение использование программы
+        # Остановка или
+        # продолжение использование программы (зависит от "result")
         if result == "stop":
             break
         elif result == "continue":
@@ -138,7 +165,7 @@ try:
         elif result is None:
             pass
 
-        def find_cell_by_value(folder_path, search_value: str):
+        def find_cell_by_value(folder_path, search_value: str) -> list:
             store_results = []  # Список для хранения результатов поиска
 
             # Итерируемся по всем файлам в указанной папке

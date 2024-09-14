@@ -13,31 +13,56 @@ author = "AAIgorevich"
 class SCEComands:
     # data text commands
     def __init__(self) -> None:
-        self.input_text = textwrap.dedent("""
+        self.SCE_greeting = textwrap.dedent("""
+        ╔══════════════════════════════╗
+        ║        ┌───────┐             ║
+        ║        │  SCE  │             ║
+        ║        └──╗─╔──┘             ║
+        ║ ╔═══──────╝─╚──────═══╗      ║
+        ║ ║ ░ ╔──╗ ┌───┐ ╔──╗ ░ ║      ║
+        ║ ╚═══╝  │ │>hi│ │  ╚═══╝      ║
+        ║        │ └───┘ │             ║
+        ║        └───────┘             ║
+        ╚══════════════════════════════╝""").strip() 
+        self.hint_help = textwrap.dedent("""
         Для того чтобы получить список команд,
         введите: 'searcher -help'.""").strip()
         self.stop_text = "Досвидания. Запускайте еще!"
         self.help_text = textwrap.dedent("""
-        Доступные команды:
-        searcher -stop: Выйти из программы
-        searcher -help: Показать этот список команд
-        searcher -hi: Приветствие
-        searcher -info: Информация о программе
+        ╔══════════════════════════════════════════════╗
+        ║                                              ║
+        ║ Доступные команды:                           ║
+        ║ ============================================ ║
+        ║ searcher -hi  : Приветствие                  ║
+        ║ searcher -stop: Выйти из программы           ║
+        ║ searcher -info: Информация о программе       ║
+        ║ searcher -help: Показать этот список команд  ║
+        ║                                              ║
+        ╚══════════════════════════════════════════════╝
         """).strip()
         self.hi_text = textwrap.dedent("""
-        Добро пожаловать в SearcherCellsExcell!
-        Эта программа поможет вам быстро находить ячейки
-        с определёнными значениями в ваших Excel файлах.
-        Начните поиск и упростите свою работу с данными.
-        Удачи!
+        ╔════════════════════════════════════════════════════╗
+        ║                                                    ║
+        ║ Добро пожаловать в SearcherCellsExcell!            ║
+        ║ ================================================== ║
+        ║ Эта программа поможет вам быстро находить ячейки   ║
+        ║ с определёнными значениями в ваших Excel файлах.   ║
+        ║ Начните поиск и упростите свою работу с данными.   ║
+        ║ Удачи!                                             ║
+        ║                                                    ║
+        ╚════════════════════════════════════════════════════╝
         """).strip()
-        self.info_text = textwrap.dedent(f"""
-        SearcherCellsExcell program information:
-        =======================================
-        SearcherCellsExcell or SCE version: {version}
-        author: {author}
-        link GitHub author: https://github.com/{author}
-        """).strip()
+        self.info_text = (textwrap.dedent("""
+        ╔════════════════════════════════════════════════════╗
+        ║                                                    ║
+        ║ SearcherCellsExcell program information:           ║
+        ║ ================================================== ║
+        ║ SearcherCellsExcell or SCE version: {}            ║
+        ║ author: {}                                ║
+        ║ link GitHub author: https://github.com/{} ║
+        ║                                                    ║
+        ╚════════════════════════════════════════════════════╝
+        """).strip()).format(version, author, author)
 
     # Остановка и выход из программы
     def command_sce_stop(self):
@@ -59,7 +84,9 @@ class SCEComands:
 
     # Подсказка для пользователей выводится единожды
     def first_init_command_help(self):
-        return print(self.input_text)
+        print(self.SCE_greeting)
+        sleep(0.2)
+        return print(self.hint_help)
 
     # Вызов команд
     def call_comands(self, search_value) -> str | None:

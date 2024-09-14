@@ -153,9 +153,18 @@ class ParserConfigToList:
         _result = self.store_result
         return _result
 
+
+class SCESearchInExcellFiles:
+    def __init__(self) -> None:
+        PCtL = ParserConfigToList()
+        self.list_path = PCtL.parse_dict_to_list()
+
+    def read_path():
+        pass
+
     def search_file(self):
         for filename in self.files_and_path:
-            ...
+            pass
 
     def loop_init(self):
         try:
@@ -171,10 +180,6 @@ class ParserConfigToList:
                 # ! <- Сюда ложим функции
         except KeyboardInterrupt:
             SCE.command_sce_stop()
-
-
-class SCESearchInExcellFiles:
-    pass
 
 
 SCE = SCEComands()

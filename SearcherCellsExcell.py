@@ -13,6 +13,7 @@ author = "AAIgorevich"
 file_config_ini = ""
 
 
+# Класс в котором сосредоточенны команды для программы
 class SCEComands:
     # data text commands
     def __init__(self) -> None:
@@ -109,6 +110,7 @@ class SCEComands:
         return None
 
 
+# Класс в котором присутсвуют инструменты для извлечение данных из конфиг файла
 class ParserConfigToList:
 
     def __init__(self) -> None:

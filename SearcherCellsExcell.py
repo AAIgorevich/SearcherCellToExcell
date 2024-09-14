@@ -118,10 +118,15 @@ class ParserConfigToList:
 
     def try_read_config_and_write_in_dict(self):
         try:
+            # Читаем конфиг файл
             self.config.read(file_config_ini)
+            # Пробегаем по содержимому файла
             for section in self.config.sections():
+                # Извлекаем путь
                 path = self.config[section]["path"].strip("''")
+                # Извлекаем наименование файлов
                 files = self.config[section]["files"].split()
+                # Создаем словарь куда помещаем данные
                 self.files_and_path = {
                     "path": path,
                     "files": files
@@ -132,6 +137,7 @@ class ParserConfigToList:
             return self.files_and_path
 
     def parse_dict_to_list(self):
+        # Получаем готовый словарь
         file_path_dict = self.try_read_config_and_write_in_dict()
         self.store_result = [
             f"{group['path']}\\{file}"

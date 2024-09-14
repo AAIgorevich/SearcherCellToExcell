@@ -10,7 +10,7 @@ import configparser
 
 version = "1.1"
 author = "AAIgorevich"
-file_config_ini = ""
+file_config_ini = os.path.abspath(os.curdir) + r'\config.ini'
 
 
 # Класс в котором сосредоточенны команды для программы

@@ -172,7 +172,8 @@ try:
             return store_results
 
         locations = find_cell_by_value(folder_path, search_value)
-        table = PrettyTable(["Имя файла", "Название Листа", "Координаты Ячейки"])
+        table = PrettyTable(
+            ["Имя файла", "Название Листа", "Координаты Ячейки"])
         for row in locations:
             table.add_row(row)
         if locations:

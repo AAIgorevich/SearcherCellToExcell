@@ -170,6 +170,7 @@ class FindCellByValue:
         except KeyboardInterrupt:
             SCE.command_sce_stop()
 
+
 SCE = SCEComands()
 
 SCE.first_init_command_help()

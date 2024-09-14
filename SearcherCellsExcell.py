@@ -15,7 +15,7 @@ class SCEComands:
     def __init__(self) -> None:
         self.SCE_greeting = textwrap.dedent("""
         ╔══════════════════════════════╗
-        ║        ┌───────┐             ║
+        ║        ┌/\───/\┐             ║
         ║        │  SCE  │             ║
         ║        └──╗─╔──┘             ║
         ║ ╔═══──────╝─╚──────═══╗      ║

@@ -109,18 +109,7 @@ class SCEComands:
         return None
 
 
-class SCESomeFilesSearch:
-    def __init__(self) -> None:
-        pass
-
-    def extract_files_value(self):
-        pass
-
-    def check_exctract_files(self):
-        pass
-
-
-class FindCellByValue:
+class ParserConfigToList:
 
     def __init__(self) -> None:
         self.store_result = []  # Для

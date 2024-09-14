@@ -73,7 +73,7 @@ class SCEComands:
         sleep(0.5)
         return sys.exit()
 
-    # Вывод всех имеющихся команд для на консоль (помощь)
+    # Вывод всех имеющихся команд на консоль (помощь)
     def command_sce_help(self):
         return print(self.help_text)
 

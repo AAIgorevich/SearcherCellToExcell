@@ -5,17 +5,21 @@ from tqdm import tqdm
 from prettytable import PrettyTable
 from time import sleep
 import textwrap
+import configparser
+
 
 version = "1.1"
 author = "AAIgorevich"
+file_config_ini = ""
 
 
+# Класс в котором сосредоточенны команды для программы
 class SCEComands:
     # data text commands
     def __init__(self) -> None:
-        self.SCE_greeting = textwrap.dedent("""
+        self.SCE_greeting = textwrap.dedent(r"""
         ╔══════════════════════════════╗
-        ║        ┌───────┐             ║
+        ║        ┌/\───/\┐             ║
         ║        │  SCE  │             ║
         ║        └──╗─╔──┘             ║
         ║ ╔═══──────╝─╚──────═══╗      ║
@@ -70,7 +74,7 @@ class SCEComands:
         sleep(0.5)
         return sys.exit()
 
-    # Вывод всех имеющихся команд для на консоль (помощь)
+    # Вывод всех имеющихся команд на консоль (помощь)
     def command_sce_help(self):
         return print(self.help_text)
 
@@ -106,12 +110,76 @@ class SCEComands:
         return None
 
 
-class SCESomeFilesSearch:
+# Класс в котором присутсвуют инструменты для извлечение данных из конфиг файла
+class ParserConfigToList:
+
     def __init__(self) -> None:
+        self.store_result = []  # Для
+        self.files_and_path = {}
+        self.config = configparser.ConfigParser()
+
+    def try_read_config_and_write_in_dict(self):
+        try:
+            # Читаем конфиг файл
+            self.config.read(file_config_ini)
+            # Пробегаем по содержимому файла
+            for section in self.config.sections():
+                # Извлекаем путь
+                path = self.config[section]["path"].strip("''")
+                # Извлекаем наименование файлов
+                files = self.config[section]["files"].split()
+                # Создаем словарь куда помещаем данные
+                self.files_and_path = {
+                    "path": path,
+                    "files": files
+                }
+        except Exception:
+            print("config файл отсутсвует!")
+        _result_dict = self.files_and_path
+        return _result_dict
+
+    def parse_dict_to_list(self):
+        # Получаем готовый словарь
+        _file_path_dict = self.try_read_config_and_write_in_dict()
+        # Проверяем пустой словарь или нет
+        if not _file_path_dict:
+            self.store_result = [
+                f"{group['path']}\\{file}"
+                for group in _file_path_dict.values()
+                for file in group['files']
+            ]
+        else:
+            print("Конфиг файл не заполнен!")
+        _result = self.store_result
+        return _result
+
+
+class SCESearchInExcellFiles:
+    def __init__(self) -> None:
+        PCtL = ParserConfigToList()
+        self.list_path = PCtL.parse_dict_to_list()
+
+    def read_path():
         pass
 
-    def extract_files_value(self):
-        pass
+    def search_file(self):
+        for filename in self.files_and_path:
+            pass
+
+    def loop_init(self):
+        try:
+            while True:
+                input_search_value = str(input("Ваше значение: "))
+                result = SCE.call_comands(input_search_value)
+                if result == "stop":
+                    break
+                elif result == "continue":
+                    continue
+                elif result is None:
+                    pass
+                # ! <- Сюда ложим функции
+        except KeyboardInterrupt:
+            SCE.command_sce_stop()
 
 
 SCE = SCEComands()
@@ -127,10 +195,11 @@ try:
         # Укажите значение, которое нужно найти
         search_value = str(input("Ваше значение: "))
 
-        # Получение результата
+        # Получение результата комманды
         result = SCE.call_comands(search_value)
 
-        # Остановка или продолжение использование программы
+        # Остановка или
+        # продолжение использование программы (зависит от "result")
         if result == "stop":
             break
         elif result == "continue":
@@ -138,7 +207,7 @@ try:
         elif result is None:
             pass
 
-        def find_cell_by_value(folder_path, search_value: str):
+        def find_cell_by_value(folder_path, search_value: str) -> list:
             store_results = []  # Список для хранения результатов поиска
 
             # Итерируемся по всем файлам в указанной папке

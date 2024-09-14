@@ -131,19 +131,22 @@ class ParserConfigToList:
                     "path": path,
                     "files": files
                 }
-                return self.files_and_path
         except Exception:
             print("config файл отсутсвует!")
-            return self.files_and_path
+        return self.files_and_path
 
     def parse_dict_to_list(self):
         # Получаем готовый словарь
         file_path_dict = self.try_read_config_and_write_in_dict()
-        self.store_result = [
-            f"{group['path']}\\{file}"
-            for group in file_path_dict.values()
-            for file in group['files']
-        ]
+        # Проверяем пустой словарь или нет
+        if not file_path_dict:
+            self.store_result = [
+                f"{group['path']}\\{file}"
+                for group in file_path_dict.values()
+                for file in group['files']
+            ]
+        else:
+            print("Конфиг файл не заполнен!")
         return self.store_result
 
     def search_file(self):

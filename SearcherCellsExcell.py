@@ -173,6 +173,10 @@ class ParserConfigToList:
             SCE.command_sce_stop()
 
 
+class SCESearchInExcellFiles:
+    pass
+
+
 SCE = SCEComands()
 
 SCE.first_init_command_help()

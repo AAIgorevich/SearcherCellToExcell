@@ -106,6 +106,14 @@ class SCEComands:
         return None
 
 
+class SCESomeFilesSearch:
+    def __init__(self) -> None:
+        pass
+
+    def extract_files_value(self):
+        pass
+
+
 SCE = SCEComands()
 
 SCE.first_init_command_help()

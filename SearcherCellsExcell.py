@@ -136,8 +136,34 @@ class ParserConfigToList:
                 }
         except Exception:
             print("config файл отсутсвует!")
-        _result_dict = self.files_and_path
-        return _result_dict
+            new_config_file = open("config.ini", "w", encoding="utf-8")
+            new_config_file.write(textwrap.dedent("""
+            [ListGroups]
+                """).strip()
+                )
+            new_config_file.write(textwrap.dedent("""
+            # "ListGroups.GroupFile" Создался по причине того,
+            # что в корневой папке программы присутсвуют файлы,
+            # в которых можно осуществить поиск ячеек в Excell файлах.
+            #  Если вы не желаете искать в этих файлах указанных в
+            # "files", то просто удалите все начиная:
+            # от "ListGroups.GroupFile", заканчивая "files"(включая).
+            [ListGroups.GroupFile]
+            path = {}
+            files = Test_search_№1.xlsx Test_search_№2.xlsx Test_search_№3.xlsx
+                """).format(sce_workspace_dir))
+            new_config_file.write(textwrap.dedent("""
+            # Ниже представлен пример.
+            # Раскоментируя его убрав "#",
+            # Вы можете дополнить его или удалить
+            # по собственному разумению.
+            # [ListGroups.GroupFile1]
+            # path = ""
+            # files = example_1.xlsx example_2.xlsx example_3.xlsx
+                """))
+            new_config_file.close()
+            print("Созданн новый конфиг файл пожалуйста заполните его!")
+            exit()
 
     def parse_dict_to_list(self):
         # Получаем готовый словарь

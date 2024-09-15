@@ -183,6 +183,7 @@ class ParserConfigToList:
             ]
         else:
             print("Конфиг файл не заполнен!")
+            exit()
         _result = self.store_result
         return _result
 

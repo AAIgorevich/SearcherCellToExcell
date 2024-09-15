@@ -171,7 +171,7 @@ class ParserConfigToList:
             print("Созданн новый конфиг файл пожалуйста заполните его!")
             exit()
 
-    def parse_dict_to_list(self):
+    def parse_dict_to_list(self) -> list:
         # Получаем готовый словарь
         _file_path_dict = self.try_read_config_and_write_in_dict()
         # Проверяем пустой словарь или нет

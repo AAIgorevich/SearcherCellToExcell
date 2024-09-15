@@ -187,18 +187,56 @@ class ParserConfigToList:
         _result = self.store_result
         return _result
 
+    def search_excell_files_in_root(self) -> list:
+        pass
+
+
+PCTL1 = ParserConfigToList()
+s1 = PCTL1.parse_dict_to_list()
+print(s1)
+
 
 class SCESearchInExcellFiles:
     def __init__(self) -> None:
         PCtL = ParserConfigToList()
         self.list_path = PCtL.parse_dict_to_list()
+        self.store_results = []
 
-    def read_path():
+    def search_in_all_sheets(self):
         pass
 
-    def search_file(self):
-        for filename in self.files_and_path:
-            pass
+    def search_in_all_cells(self):
+        pass
+
+    def search_file_and_load_workbook(self):
+        for file_path in self.list_path:
+            if file_path.endswith(".xlsx"):
+                # Загружаем книгу Excel
+                workbook = openpyxl.load_workbook(
+                    file_path, read_only=True
+                    )
+                # Итерируемся по всем листам книги
+                for sheet_name in tqdm(
+                        workbook.sheetnames,
+                        # Вывод файлов которые были просмотренны
+                        desc=f"Просмотр файла {file_path}.",
+                        colour="#FFFF00",
+                        ascii=True, leave=False
+                        ):
+                    sheet = workbook[sheet_name]
+                    # Итерируемся по всем ячейкам в листе
+                    for row in sheet.iter_rows():
+                        for cell in row:
+                            # Проверяем
+                            # совпадает ли значение ячейки с искомыми
+                            cell_value = str(cell.value)
+                            if cell_value == search_value:
+                                # Сохраняем путь к
+                                # файлу, имени листа и адреса ячейки
+                                self.store_results.append(
+                                    [file_path,
+                                        sheet.title,
+                                        cell.coordinate])
 
     def loop_init(self):
         try:

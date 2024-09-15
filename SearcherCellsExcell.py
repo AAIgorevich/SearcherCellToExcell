@@ -125,16 +125,22 @@ class ParserConfigToList:
             self.config.read(file_config_ini)
             # Пробегаем по содержимому файла
             for section in self.config.sections():
-                # Извлекаем путь
-                path = self.config[section]["path"].strip("''")
-                # Извлекаем наименование файлов
-                files = self.config[section]["files"].split()
-                # Создаем словарь куда помещаем данные
-                self.files_and_path = {
-                    "path": path,
-                    "files": files
-                }
-        except Exception:
+                if self.config[section].values():
+                    # Извлекаем путь
+                    path = self.config[section]["path"].strip("''")
+                    # Извлекаем наименование файлов
+                    files = self.config[section]["files"].strip('"').split()
+                    # Создаем словарь куда помещаем данные
+                    self.files_and_path.update(
+                            {
+                                section: {
+                                    "path": path,
+                                    "files": files
+                                    }
+                            }
+                        )
+            return self.files_and_path
+        else:  # Иначе создание конфигурационного файла
             print("config файл отсутсвует!")
             new_config_file = open("config.ini", "w", encoding="utf-8")
             new_config_file.write(textwrap.dedent("""

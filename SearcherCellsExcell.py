@@ -10,7 +10,8 @@ import configparser
 
 version = "1.1"
 author = "AAIgorevich"
-file_config_ini = os.path.abspath(os.curdir) + r'\config.ini'
+sce_workspace_dir = os.path.abspath(os.curdir)
+file_config_ini = os.path.join(sce_workspace_dir, 'config.ini')
 
 
 # Класс в котором сосредоточенны команды для программы

@@ -48,7 +48,7 @@ class SCEComands:
         self.hi_text = textwrap.dedent("""
         ╔════════════════════════════════════════════════════╗
         ║                                                    ║
-        ║ Добро пожаловать в SearcherCellsExcell!            ║
+        ║ Добро пожаловать в SearcherCellsToExcell!          ║
         ║ ================================================== ║
         ║ Эта программа поможет вам быстро находить ячейки   ║
         ║ с определёнными значениями в ваших Excel файлах.   ║
@@ -60,9 +60,9 @@ class SCEComands:
         self.info_text = (textwrap.dedent("""
         ╔════════════════════════════════════════════════════╗
         ║                                                    ║
-        ║ SearcherCellsExcell program information:           ║
+        ║ SearcherCellsToExcell program information:         ║
         ║ ================================================== ║
-        ║ SearcherCellsExcell or SCE version: {}            ║
+        ║ SearcherCellsExcell or SCtE version: {}           ║
         ║ author: {}                                ║
         ║ link GitHub author: https://github.com/{} ║
         ║                                                    ║

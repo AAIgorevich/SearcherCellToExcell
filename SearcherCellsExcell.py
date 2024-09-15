@@ -72,7 +72,7 @@ class SCEComands:
     # Остановка и выход из программы
     def command_sce_stop(self):
         print(self.stop_text)
-        sleep(0.5)
+        sleep(0.2)
         return sys.exit()
 
     # Вывод всех имеющихся команд на консоль (помощь)
@@ -119,8 +119,8 @@ class ParserConfigToList:
         self.files_and_path = {}
         self.config = configparser.ConfigParser()
 
-    def try_read_config_and_write_in_dict(self):
-        try:
+    def read_or_create_config(self) -> dict:
+        if os.path.exists(file_config_ini):
             # Читаем конфиг файл
             self.config.read(file_config_ini)
             # Пробегаем по содержимому файла

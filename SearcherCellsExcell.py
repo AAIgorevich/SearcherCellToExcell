@@ -173,9 +173,9 @@ class ParserConfigToList:
 
     def parse_dict_to_list(self) -> list:
         # Получаем готовый словарь
-        _file_path_dict = self.try_read_config_and_write_in_dict()
+        _file_path_dict: dict = self.read_or_create_config()
         # Проверяем пустой словарь или нет
-        if not _file_path_dict:
+        if _file_path_dict:
             self.store_result = [
                 f"{group['path']}\\{file}"
                 for group in _file_path_dict.values()

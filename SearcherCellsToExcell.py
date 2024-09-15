@@ -62,7 +62,7 @@ class SCEComands:
         ║                                                    ║
         ║ SearcherCellsToExcell program information:         ║
         ║ ================================================== ║
-        ║ SearcherCellsExcell or SCtE version: {}           ║
+        ║ SearcherCellsToExcell or SCtE version: {}         ║
         ║ author: {}                                ║
         ║ link GitHub author: https://github.com/{} ║
         ║                                                    ║

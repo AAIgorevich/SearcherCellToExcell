@@ -112,7 +112,8 @@ class SCEComands:
 
 
 # Класс в котором присутсвуют инструменты для извлечение данных из конфиг файла
-class ParserConfigToList:
+# или создания собственного конфига файла если он отсутсвует
+class ParserConfigToListOrCreateNew:
 
     def __init__(self) -> None:
         self.store_result = []  # Для

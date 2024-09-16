@@ -142,7 +142,7 @@ class ParserConfigToList:
             return self.files_and_path
         else:  # Иначе создание конфигурационного файла
             print("config файл отсутсвует!")
-            new_config_file = open("config.ini", "w", encoding="utf-8")
+            new_config_file = open("config.ini", "w")
             new_config_file.write(textwrap.dedent("""
             [ListGroups]
                 """).strip()

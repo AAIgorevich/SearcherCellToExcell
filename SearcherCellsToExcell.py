@@ -158,8 +158,8 @@ class ParserConfigToListOrCreateNew:
             # от "ListGroups.GroupFile", заканчивая "files"(включая).
             [ListGroups.GroupFile]
             path = {}
-            files = Test_search_№1.xlsx Test_search_№2.xlsx Test_search_№3.xlsx
-                """).format(sce_workspace_dir))
+            files = {}
+                """).format(sce_workspace_dir, string_excell_files))
             new_config_file.write(textwrap.dedent("""
             # Ниже представлен пример.
             # Раскоментируя его убрав "#",
@@ -189,18 +189,19 @@ class ParserConfigToListOrCreateNew:
         _result = self.store_result
         return _result
 
-    def search_excell_files_in_root(self) -> list:
-        pass
-
-
-PCTL1 = ParserConfigToList()
-s1 = PCTL1.parse_dict_to_list()
-print(s1)
+    def search_excell_files_in_root(self) -> str:
+        list_excell_files: list = []
+        # Итерируемся по всем файлам в указанной папке
+        for filename in os.listdir(sce_workspace_dir):
+            if filename.endswith(".xlsx"):  # ! <= TODO *for old formats
+                list_excell_files.append(filename)
+        string_excell_files: str = " ".join(list_excell_files)
+        return string_excell_files
 
 
 class SCESearchInExcellFiles:
     def __init__(self) -> None:
-        PCtL = ParserConfigToList()
+        PCtL = ParserConfigToListOrCreateNew()
         self.list_path = PCtL.parse_dict_to_list()
         self.store_results = []
 

@@ -1,6 +1,6 @@
 *.xlsx
 *.exe
-**/EnvForSearcherCellsExcell
+**/SearcherVenv
 *settings.ini
 *.json
 *output

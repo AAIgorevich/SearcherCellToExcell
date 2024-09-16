@@ -203,6 +203,7 @@ class SCESearchInExcellFiles:
     def __init__(self) -> None:
         PCtL = ParserConfigToListOrCreateNew()
         self.list_path = PCtL.parse_dict_to_list()
+        self.SCECommands = SCEComands()
         self.store_results = []
 
     def search_in_all_sheets(self):
@@ -243,6 +244,7 @@ class SCESearchInExcellFiles:
 
     def loop_init(self):
         try:
+            self.SCECommands.first_init_command_help()
             while True:
                 input_search_value = str(input("Ваше значение: "))
                 result = SCE.call_comands(input_search_value)

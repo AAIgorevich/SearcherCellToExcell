@@ -142,7 +142,7 @@ class ParserConfigToListOrCreateNew:
         else:  # Иначе создание конфигурационного файла
             print("config файл отсутсвует!")
             string_excell_files: str = self.search_excell_files_in_root()
-            new_config_file = open("config.ini", "w", encoding="utf-8")
+            new_config_file = open("config.ini", "w")
             new_config_file.write(textwrap.dedent("""
             [ListGroups]
                 """).strip()

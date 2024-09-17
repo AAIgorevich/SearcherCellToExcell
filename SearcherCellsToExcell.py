@@ -10,8 +10,9 @@ import configparser
 
 version = "1.1"
 author = "AAIgorevich"
+name_config_file = 'FilesSetting.ini'
 sce_workspace_dir = os.path.abspath(os.curdir)
-file_config_ini = os.path.join(sce_workspace_dir, 'config.ini')
+file_config_ini = os.path.join(sce_workspace_dir, name_config_file)
 
 
 # Класс в котором сосредоточенны команды для программы
@@ -33,17 +34,18 @@ class SCEComands:
         Для того чтобы получить список команд,
         введите: 'searcher -help'.""").strip()
         self.stop_text = "Досвидания. Запускайте еще!"
-        self.help_text = textwrap.dedent("""
-        ╔══════════════════════════════════════════════╗
-        ║                                              ║
-        ║ Доступные команды:                           ║
-        ║ ============================================ ║
-        ║ searcher -hi  : Приветствие                  ║
-        ║ searcher -stop: Выйти из программы           ║
-        ║ searcher -info: Информация о программе       ║
-        ║ searcher -help: Показать этот список команд  ║
-        ║                                              ║
-        ╚══════════════════════════════════════════════╝
+        self.help_text = textwrap.dedent(f"""
+        ╔═══════════════════════════════════════════════╗
+        ║                                               ║
+        ║ Доступные команды:                            ║
+        ║ ============================================= ║
+        ║ searcher -hi   : Приветствие                  ║
+        ║ searcher -stop : Выйти из программы           ║
+        ║ searcher -info : Информация о программе       ║
+        ║ searcher -help : Показать этот список команд  ║
+        ║ searcher -d -fs: Удалить {name_config_file}     ║
+        ║                                               ║
+        ╚═══════════════════════════════════════════════╝
         """).strip()
         self.hi_text = textwrap.dedent("""
         ╔════════════════════════════════════════════════════╗
@@ -69,6 +71,26 @@ class SCEComands:
         ╚════════════════════════════════════════════════════╝
         """).strip()).format(version, author, author)
 
+    # Вызов команд
+    def call_comands(self, search_value) -> str | None:
+        if search_value == "searcher -stop":
+            self.command_sce_stop()
+            return "stop"
+        elif search_value == "searcher -help":
+            self.command_sce_help()
+            return "continue"
+        elif search_value == "searcher -hi":
+            self.command_sce_hi()
+            return "continue"
+        elif search_value == "searcher -info":
+            self.command_sce_info()
+            return "continue"
+        elif search_value == "searcher -d config":
+            self.remove_config_file()
+            return "continue"
+        # Если команда не распознана, возвращаем None, чтобы продолжить поиск
+        return None
+
     # Остановка и выход из программы
     def command_sce_stop(self):
         print(self.stop_text)
@@ -93,22 +115,12 @@ class SCEComands:
         sleep(0.2)
         return print(self.hint_help)
 
-    # Вызов команд
-    def call_comands(self, search_value) -> str | None:
-        if search_value == "searcher -stop":
-            self.command_sce_stop()
-            return "stop"
-        elif search_value == "searcher -help":
-            self.command_sce_help()
-            return "continue"
-        elif search_value == "searcher -hi":
-            self.command_sce_hi()
-            return "continue"
-        elif search_value == "searcher -info":
-            self.command_sce_info()
-            return "continue"
-        # Если команда не распознана, возвращаем None, чтобы продолжить поиск
-        return None
+    def remove_config_file(self) -> None:
+        if os.path.exists(file_config_ini):
+            os.remove(file_config_ini)
+            print("Файд был успешно удален!")
+        else:
+            print("Невозможно удалить конфиг файл, по причине его отсутствия!")
 
 
 # Класс в котором присутсвуют инструменты для извлечение данных из конфиг файла
@@ -142,7 +154,7 @@ class ParserConfigToListOrCreateNew:
         else:  # Иначе создание конфигурационного файла
             print("config файл отсутсвует!")
             string_excell_files: str = self.search_excell_files_in_root()
-            new_config_file = open("config.ini", "w")
+            new_config_file = open(file_config_ini, "w")
             new_config_file.write(textwrap.dedent("""
             [ListGroups]
                 """).strip()
@@ -198,15 +210,21 @@ class ParserConfigToListOrCreateNew:
 
 
 # Боевой класс.
-# Осуществляет поиск значений в ячейках excel.
+# В нем описан поиск значений в ячейках excel.
 class SCESearchInExcellFiles:
 
     def __init__(self) -> None:
-        PCtL: object = ParserConfigToListOrCreateNew()
+        PCtL = ParserConfigToListOrCreateNew()
         self.list_path: list = PCtL.parse_dict_to_list()
-        self.SCECommands: object = SCEComands()
+        self.SCECommands = SCEComands()
         self.store_results: list = []
         self.input_search_value: str = ...
+        self.str_found = \
+            "\nНайдены совпадения в (.xlsx) файлах с вашем значением: "
+        self.str_stroke = \
+            "|===========================================================|"
+        self.str_not_found = \
+            "\nДанное значение не обнаруженно в (.xlsx) файлах."
 
     def search_in_all_sheets(self, workbook, file_path):
         # Итерируемся по всем листам книги
@@ -218,22 +236,22 @@ class SCESearchInExcellFiles:
                 ascii=True, leave=False
                 ):
             sheet = workbook[sheet_name]
-    #         self.search_in_all_cells(sheet, file_path)
+            self.search_in_all_cells(sheet, file_path)
 
-    # def search_in_all_cells(self, sheet, file_path):
-    #     # Итерируемся по всем ячейкам в листе
-            for row in sheet.iter_rows():
-                for cell in row:
-                    # Проверяем
-                    # совпадает ли значение ячейки с искомыми
-                    cell_value = str(cell.value)
-                    if cell_value == self.input_search_value:
-                        # Сохраняем путь к
-                        # файлу, имени листа и адреса ячейки
-                        self.store_results.append(
-                            [file_path,
-                                sheet.title,
-                                cell.coordinate])
+    def search_in_all_cells(self, sheet, file_path):
+        # Итерируемся по всем ячейкам в листе
+        for row in sheet.iter_rows():
+            for cell in row:
+                # Проверяем
+                # совпадает ли значение ячейки с искомыми
+                cell_value = str(cell.value)
+                if cell_value == self.input_search_value:
+                    # Сохраняем путь к
+                    # файлу, имени листа и адреса ячейки
+                    self.store_results.append(
+                        [file_path,
+                            sheet.title,
+                            cell.coordinate])
 
     def search_file_and_load_workbook(self):
         for file_path in self.list_path:
@@ -242,6 +260,9 @@ class SCESearchInExcellFiles:
                 file_path, read_only=True
                 )
             self.search_in_all_sheets(workbook, file_path)
+
+    def clear_store_result(self):
+        self.store_results: list = []
 
     def SCE_start_search_in_excel(self):
         try:
@@ -257,16 +278,17 @@ class SCESearchInExcellFiles:
                     pass
                 self.search_file_and_load_workbook()
                 locations = self.store_results
+                self.clear_store_result()
                 table = PrettyTable(
                     ["Имя файла", "Название Листа", "Координаты Ячейки"])
                 for row in locations:
                     table.add_row(row)
                 if locations:
-                    print("\nНайдены совпадения в (.xlsx) файлах с вашем значением: ")
+                    print(self.str_found)
                     print(table)
                 else:
-                    print("\nДанное значение не обнаруженно в (.xlsx) файлах.")
-                print("|===========================================================|")
+                    print(self.str_not_found)
+                print(self.str_stroke)
         except KeyboardInterrupt:
             self.SCECommands.command_sce_stop()
 

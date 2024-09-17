@@ -11,8 +11,6 @@ import configparser
 version = "1.1"
 author = "AAIgorevich"
 name_config_file = 'FilesSetting.ini'
-sce_workspace_dir = os.path.abspath(os.curdir)
-file_config_ini = os.path.join(sce_workspace_dir, name_config_file)
 
 
 # Класс в котором сосредоточенны команды для программы
@@ -294,5 +292,7 @@ class SCESearchInExcellFiles:
 
 
 if __name__ == "__main__":
+    sce_workspace_dir = os.path.abspath(os.curdir)
+    file_config_ini = os.path.join(sce_workspace_dir, name_config_file)
     root = SCESearchInExcellFiles()
     root.SCE_start_search_in_excel()

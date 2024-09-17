@@ -197,6 +197,8 @@ class ParserConfigToListOrCreateNew:
         return string_excell_files
 
 
+# Боевой класс.
+# Осуществляет поиск значений в ячейках excel.
 class SCESearchInExcellFiles:
 
     def __init__(self) -> None:

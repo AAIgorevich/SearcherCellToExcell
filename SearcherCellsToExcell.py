@@ -200,141 +200,77 @@ class ParserConfigToListOrCreateNew:
 
 
 class SCESearchInExcellFiles:
+
     def __init__(self) -> None:
-        PCtL = ParserConfigToListOrCreateNew()
-        self.list_path = PCtL.parse_dict_to_list()
-        self.SCECommands = SCEComands()
-        self.store_results = []
+        PCtL: object = ParserConfigToListOrCreateNew()
+        self.list_path: list = PCtL.parse_dict_to_list()
+        self.SCECommands: object = SCEComands()
+        self.store_results: list = []
+        self.input_search_value: str = ...
 
-    def search_in_all_sheets(self):
-        pass
+    def search_in_all_sheets(self, workbook, file_path):
+        # Итерируемся по всем листам книги
+        for sheet_name in tqdm(
+                workbook.sheetnames,
+                # Вывод файлов которые были просмотренны
+                desc=f"Просмотр файла {file_path}.",
+                colour="#FFFF00",
+                ascii=True, leave=False
+                ):
+            sheet = workbook[sheet_name]
+    #         self.search_in_all_cells(sheet, file_path)
 
-    def search_in_all_cells(self):
-        pass
+    # def search_in_all_cells(self, sheet, file_path):
+    #     # Итерируемся по всем ячейкам в листе
+            for row in sheet.iter_rows():
+                for cell in row:
+                    # Проверяем
+                    # совпадает ли значение ячейки с искомыми
+                    cell_value = str(cell.value)
+                    if cell_value == self.input_search_value:
+                        # Сохраняем путь к
+                        # файлу, имени листа и адреса ячейки
+                        self.store_results.append(
+                            [file_path,
+                                sheet.title,
+                                cell.coordinate])
 
     def search_file_and_load_workbook(self):
         for file_path in self.list_path:
-            if file_path.endswith(".xlsx"):
-                # Загружаем книгу Excel
-                workbook = openpyxl.load_workbook(
-                    file_path, read_only=True
-                    )
-                # Итерируемся по всем листам книги
-                for sheet_name in tqdm(
-                        workbook.sheetnames,
-                        # Вывод файлов которые были просмотренны
-                        desc=f"Просмотр файла {file_path}.",
-                        colour="#FFFF00",
-                        ascii=True, leave=False
-                        ):
-                    sheet = workbook[sheet_name]
-                    # Итерируемся по всем ячейкам в листе
-                    for row in sheet.iter_rows():
-                        for cell in row:
-                            # Проверяем
-                            # совпадает ли значение ячейки с искомыми
-                            cell_value = str(cell.value)
-                            if cell_value == search_value:
-                                # Сохраняем путь к
-                                # файлу, имени листа и адреса ячейки
-                                self.store_results.append(
-                                    [file_path,
-                                        sheet.title,
-                                        cell.coordinate])
+            # Загружаем книгу Excel
+            workbook = openpyxl.load_workbook(
+                file_path, read_only=True
+                )
+            self.search_in_all_sheets(workbook, file_path)
 
-    def loop_init(self):
+    def SCE_start_search_in_excel(self):
         try:
             self.SCECommands.first_init_command_help()
             while True:
-                input_search_value = str(input("Ваше значение: "))
-                result = SCE.call_comands(input_search_value)
+                self.input_search_value = str(input("Ваше значение: "))
+                result = self.SCECommands.call_comands(self.input_search_value)
                 if result == "stop":
                     break
                 elif result == "continue":
                     continue
                 elif result is None:
                     pass
-                # ! <- Сюда ложим функции
+                self.search_file_and_load_workbook()
+                locations = self.store_results
+                table = PrettyTable(
+                    ["Имя файла", "Название Листа", "Координаты Ячейки"])
+                for row in locations:
+                    table.add_row(row)
+                if locations:
+                    print("\nНайдены совпадения в (.xlsx) файлах с вашем значением: ")
+                    print(table)
+                else:
+                    print("\nДанное значение не обнаруженно в (.xlsx) файлах.")
+                print("|===========================================================|")
         except KeyboardInterrupt:
-            SCE.command_sce_stop()
+            self.SCECommands.command_sce_stop()
 
 
-SCE = SCEComands()
-
-SCE.first_init_command_help()
-
-# Укажите путь к папке с Excel-файлами
-folder_path = os.path.abspath(os.curdir)
-
-
-try:
-    while True:
-        # Укажите значение, которое нужно найти
-        search_value = str(input("Ваше значение: "))
-
-        # Получение результата комманды
-        result = SCE.call_comands(search_value)
-
-        # Остановка или
-        # продолжение использование программы (зависит от "result")
-        if result == "stop":
-            break
-        elif result == "continue":
-            continue
-        elif result is None:
-            pass
-
-        def find_cell_by_value(folder_path, search_value: str) -> list:
-            store_results = []  # Список для хранения результатов поиска
-
-            # Итерируемся по всем файлам в указанной папке
-            for filename in tqdm(
-                    os.listdir(folder_path),
-                    desc="Статус работы: ",
-                    colour="#00FF00", position=1, leave=False
-                    ):
-                if filename.endswith(".xlsx"):
-                    file_path = os.path.join(folder_path, filename)
-                    # Загружаем книгу Excel
-                    workbook = openpyxl.load_workbook(
-                        file_path, read_only=True
-                        )
-                    # Итерируемся по всем листам книги
-                    for sheet_name in tqdm(
-                            workbook.sheetnames,
-                            # Вывод файлов которые были просмотренны
-                            desc=f"Просмотр файла {filename}.",
-                            colour="#FFFF00",
-                            ascii=True, leave=False
-                            ):
-                        sheet = workbook[sheet_name]
-                        # Итерируемся по всем ячейкам в листе
-                        for row in sheet.iter_rows():
-                            for cell in row:
-                                # Проверяем
-                                # совпадает ли значение ячейки с искомыми
-                                cell_value = str(cell.value)
-                                if cell_value == search_value:
-                                    # Сохраняем путь к
-                                    # файлу, имени листа и адреса ячейки
-                                    store_results.append(
-                                        [filename,
-                                         sheet.title,
-                                         cell.coordinate])
-
-            # Возвращаем результаты поиска
-            return store_results
-
-        locations = find_cell_by_value(folder_path, search_value)
-        table = PrettyTable(
-            ["Имя файла", "Название Листа", "Координаты Ячейки"])
-        for row in locations:
-            table.add_row(row)
-        if locations:
-            print("\nНайдены совпадения в (.xlsx) файлах с вашем значением: ")
-            print(table)
-        else:
-            print("\nДанное значение не обнаруженно в (.xlsx) файлах.")
-        print("|===========================================================|")
-except KeyboardInterrupt:
-    SCE.command_sce_stop()
+if __name__ == "__main__":
+    root = SCESearchInExcellFiles()
+    root.SCE_start_search_in_excel()

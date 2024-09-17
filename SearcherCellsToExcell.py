@@ -132,14 +132,12 @@ class ParserConfigToListOrCreateNew:
                     # Извлекаем наименование файлов
                     files = self.config[section]["files"].strip('"').split()
                     # Создаем словарь куда помещаем данные
-                    self.files_and_path.update(
-                            {
+                    self.files_and_path.update({
                                 section: {
                                     "path": path,
                                     "files": files
                                     }
-                            }
-                        )
+                            })
             return self.files_and_path
         else:  # Иначе создание конфигурационного файла
             print("config файл отсутсвует!")

@@ -273,7 +273,6 @@ class SCESearchInExcellFiles:
                     pass
                 self.search_file_and_load_workbook()
                 locations = self.store_results
-                self.store_results.clear()  # Очищаем список
                 table = PrettyTable(
                     ["Имя файла", "Название Листа", "Координаты Ячейки"])
                 for row in locations:
@@ -284,6 +283,7 @@ class SCESearchInExcellFiles:
                 else:
                     print(self.str_not_found)
                 print(self.str_stroke)
+                self.store_results.clear()  # Очищаем список
         except KeyboardInterrupt:
             self.SCECommands.command_sce_stop()
 

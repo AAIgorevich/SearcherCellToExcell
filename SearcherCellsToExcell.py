@@ -11,6 +11,7 @@ import configparser
 version = "1.1"
 author = "AAIgorevich"
 name_config_file = 'path_settings.ini'
+name_file_save_result = "saved_result.txt"
 
 
 # Класс в котором сосредоточенны команды для программы
@@ -42,7 +43,8 @@ class SCEComands:
         ║ searcher -info : Информация о программе       ║
         ║ searcher -help : Показать этот список команд  ║
         ║ searcher -d -fs: Удалить {name_config_file}     ║
-        ║                                               ║
+        ║ searcher -save : Сохранить в файл, последний  ║
+        ║                   выведеный результат поиска. ║
         ╚═══════════════════════════════════════════════╝
         """).strip()
         self.hi_text = textwrap.dedent("""
@@ -86,6 +88,9 @@ class SCEComands:
         elif search_value == "searcher -d config":
             self.remove_config_file()
             return "continue"
+        elif search_value == "searcher -save":
+            self.save_last_result_in_file()
+            return "save"
         # Если команда не распознана, возвращаем None, чтобы продолжить поиск
         return None
 
@@ -121,7 +126,7 @@ class SCEComands:
             print("Невозможно удалить конфиг файл, по причине его отсутствия!")
 
     def save_last_result_in_file(self) -> None:
-        pass
+        return print("Процесс сохранения результатов запущен!")
 
 
 # Класс в котором присутсвуют инструменты для извлечение данных из конфиг файла
@@ -230,6 +235,7 @@ class SCESearchInExcellFiles:
             "|===========================================================|"
         self.str_not_found = \
             "\nДанное значение не обнаруженно в (.xlsx) файлах."
+        self.table_str: str = ""
 
     def search_in_all_sheets(self, workbook, file_path):
         # Итерируемся по всем листам книги
@@ -279,6 +285,15 @@ class SCESearchInExcellFiles:
                 if result == "stop":
                     break
                 elif result == "continue":
+                    self.table_str = ""
+                    continue
+                elif result == "save":
+                    try:
+                        with open(name_file_save_result, "w") as file:
+                            file.write(self.table_str)
+                            print("Файл успешно сохранен!")
+                    except Exception as error:
+                        print("Ошибка сохрания в файл: " + error)
                     continue
                 elif result is None:
                     pass
@@ -288,6 +303,7 @@ class SCESearchInExcellFiles:
                     ["Имя файла", "Название Листа", "Координаты Ячейки"])
                 for row in locations:
                     table.add_row(row)
+                self.table_str = table.get_string()
                 if locations:
                     print(self.str_found)
                     print(table)

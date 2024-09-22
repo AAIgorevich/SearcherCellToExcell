@@ -259,9 +259,6 @@ class SCESearchInExcellFiles:
                 )
             self.search_in_all_sheets(workbook, file_path)
 
-    def clear_store_result(self):
-        self.store_results.clear()
-
     def SCE_start_search_in_excel(self):
         try:
             self.SCECommands.first_init_command_help()
@@ -276,7 +273,7 @@ class SCESearchInExcellFiles:
                     pass
                 self.search_file_and_load_workbook()
                 locations = self.store_results
-                self.clear_store_result()
+                self.store_results.clear()  # Очищаем список
                 table = PrettyTable(
                     ["Имя файла", "Название Листа", "Координаты Ячейки"])
                 for row in locations:

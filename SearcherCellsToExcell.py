@@ -260,7 +260,7 @@ class SCESearchInExcellFiles:
             self.search_in_all_sheets(workbook, file_path)
 
     def clear_store_result(self):
-        self.store_results: list = []
+        self.store_results.clear()
 
     def SCE_start_search_in_excel(self):
         try:

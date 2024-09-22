@@ -8,7 +8,7 @@ import textwrap
 import configparser
 
 
-version = "1.1"
+version = "1.2"
 author = "AAIgorevich"
 name_config_file = 'path_settings.ini'
 name_file_save_result = "saved_result.txt"

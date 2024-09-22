@@ -140,11 +140,13 @@ class SCEComands:
 # или создания собственного конфига файла если последний отсутсвует
 class ParserConfigToListOrCreateNew:
 
+    # Хранилище переменных для внутреннего использования в классе
     def __init__(self) -> None:
         self.store_result = []  # Для
         self.files_and_path = {}
         self.config = configparser.ConfigParser()
 
+    # чтение или создания конфиг файла если таковой отсутсвует
     def read_or_create_config(self) -> dict:
         if os.path.exists(file_config_ini):
             # Читаем конфиг файл
@@ -200,6 +202,7 @@ class ParserConfigToListOrCreateNew:
             print("Создан новый конфиг файл пожалуйста заполните его!")
             exit()
 
+    #  Превращение словаря данных в тип list
     def parse_dict_to_list(self) -> list:
         # Получаем готовый словарь
         _file_path_dict: dict = self.read_or_create_config()
@@ -216,6 +219,7 @@ class ParserConfigToListOrCreateNew:
         _result = self.store_result
         return _result
 
+    #  Поиск Excel файлов в корневой директории
     def search_excell_files_in_root(self) -> str:
         list_excell_files: list = []
         # Итерируемся по всем файлам в указанной папке
@@ -230,6 +234,7 @@ class ParserConfigToListOrCreateNew:
 # В нем описан поиск значений в ячейках excel.
 class SCESearchInExcellFiles:
 
+    # Хранилище переменных для внутреннего использования в классе
     def __init__(self) -> None:
         PCtL = ParserConfigToListOrCreateNew()
         self.list_path: list = PCtL.parse_dict_to_list()
@@ -244,6 +249,7 @@ class SCESearchInExcellFiles:
             "\nДанное значение не обнаруженно в (.xlsx) файлах."
         self.table_str: str = ""
 
+    # Поиск во всех листах excel файла
     def search_in_all_sheets(self, workbook, file_path):
         # Итерируемся по всем листам книги
         for sheet_name in tqdm(
@@ -256,6 +262,7 @@ class SCESearchInExcellFiles:
             sheet = workbook[sheet_name]
             self.search_in_all_cells(sheet, file_path, sheet_name)
 
+    # Поиск во всех ячейках excel файла
     def search_in_all_cells(self, sheet, file_path, sheet_name):
         # Итерируемся по всем ячейкам в листе
         for row in tqdm(
@@ -275,6 +282,7 @@ class SCESearchInExcellFiles:
                             sheet.title,
                             cell.coordinate])
 
+    # Поиск в файле и загрузка книги excel файла
     def search_file_and_load_workbook(self):
         for file_path in self.list_path:
             # Загружаем книгу Excel
@@ -283,6 +291,7 @@ class SCESearchInExcellFiles:
                 )
             self.search_in_all_sheets(workbook, file_path)
 
+    # Боевая функция в ней происходят все процессы поиска
     def SCE_start_search_in_excel(self):
         try:
             self.SCECommands.first_init_command_help()

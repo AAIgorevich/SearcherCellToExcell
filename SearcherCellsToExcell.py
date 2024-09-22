@@ -200,6 +200,7 @@ class ParserConfigToListOrCreateNew:
                 """).strip())
             new_config_file.close()
             print("Создан новый конфиг файл пожалуйста заполните его!")
+            sleep(5)
             exit()
 
     #  Превращение словаря данных в тип list
@@ -215,6 +216,7 @@ class ParserConfigToListOrCreateNew:
             ]
         else:
             print("Конфиг файл не заполнен!")
+            sleep(5)
             exit()
         _result = self.store_result
         return _result

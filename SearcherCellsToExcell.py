@@ -182,7 +182,7 @@ class ParserConfigToListOrCreateNew:
                 # files = example_1.xlsx example_2.xlsx example_3.xlsx
                 """).strip())
             new_config_file.close()
-            print("Созданн новый конфиг файл пожалуйста заполните его!")
+            print("Создан новый конфиг файл пожалуйста заполните его!")
             exit()
 
     def parse_dict_to_list(self) -> list:

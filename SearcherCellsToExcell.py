@@ -10,7 +10,7 @@ import configparser
 
 version = "1.1"
 author = "AAIgorevich"
-name_config_file = 'FilesSetting.ini'
+name_config_file = 'path_settings.ini'
 
 
 # Класс в котором сосредоточенны команды для программы

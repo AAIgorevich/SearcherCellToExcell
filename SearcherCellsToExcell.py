@@ -89,7 +89,6 @@ class SCEComands:
             self.remove_config_file()
             return "continue"
         elif search_value == "searcher -save":
-            self.save_last_result_in_file()
             return "save"
         # Если команда не распознана, возвращаем None, чтобы продолжить поиск
         return None
@@ -118,6 +117,7 @@ class SCEComands:
         sleep(0.2)
         return print(self.hint_help)
 
+    # Комагда удаления конфиг файла
     def remove_config_file(self) -> None:
         if os.path.exists(file_config_ini):
             os.remove(file_config_ini)
@@ -125,8 +125,15 @@ class SCEComands:
         else:
             print("Невозможно удалить конфиг файл, по причине его отсутствия!")
 
-    def save_last_result_in_file(self) -> None:
-        return print("Процесс сохранения результатов запущен!")
+    # Команда сохранения результата
+    def save_last_result_in_file(self, table_str) -> None:
+        print("Процесс сохранения результатов запущен!")
+        try:
+            with open(name_file_save_result, "w") as file:
+                file.write(table_str)
+                print("Файл успешно сохранен!")
+        except Exception as error:
+            print("Ошибка сохрания в файл: " + error)
 
 
 # Класс в котором присутсвуют инструменты для извлечение данных из конфиг файла
@@ -288,12 +295,7 @@ class SCESearchInExcellFiles:
                     self.table_str = ""
                     continue
                 elif result == "save":
-                    try:
-                        with open(name_file_save_result, "w") as file:
-                            file.write(self.table_str)
-                            print("Файл успешно сохранен!")
-                    except Exception as error:
-                        print("Ошибка сохрания в файл: " + error)
+                    self.SCECommands.save_last_result_in_file(self.table_str)
                     continue
                 elif result is None:
                     pass

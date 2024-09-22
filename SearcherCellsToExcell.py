@@ -42,7 +42,7 @@ class SCEComands:
         ║ searcher -stop : Выйти из программы           ║
         ║ searcher -info : Информация о программе       ║
         ║ searcher -help : Показать этот список команд  ║
-        ║ searcher -d -fs: Удалить {name_config_file}     ║
+        ║ searcher -d -fs: Удалить {name_config_file}    ║
         ║ searcher -save : Сохранить в файл, последний  ║
         ║                   выведеный результат поиска. ║
         ╚═══════════════════════════════════════════════╝

@@ -234,11 +234,15 @@ class SCESearchInExcellFiles:
                 ascii=True, leave=False
                 ):
             sheet = workbook[sheet_name]
-            self.search_in_all_cells(sheet, file_path)
+            self.search_in_all_cells(sheet, file_path, sheet_name)
 
-    def search_in_all_cells(self, sheet, file_path):
+    def search_in_all_cells(self, sheet, file_path, sheet_name):
         # Итерируемся по всем ячейкам в листе
-        for row in sheet.iter_rows():
+        for row in tqdm(
+                sheet.iter_rows(),
+                desc=f"Имя листа: {sheet_name}",
+                ascii=True, leave=False
+                ):
             for cell in row:
                 # Проверяем
                 # совпадает ли значение ячейки с искомыми
@@ -247,7 +251,7 @@ class SCESearchInExcellFiles:
                     # Сохраняем путь к
                     # файлу, имени листа и адреса ячейки
                     self.store_results.append(
-                        [file_path,
+                        [os.path.basename(file_path),
                             sheet.title,
                             cell.coordinate])
 

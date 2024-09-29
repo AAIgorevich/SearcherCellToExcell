@@ -158,17 +158,20 @@ class ParserConfigToListOrCreateNew:
                     path = self.config[section]["path"].strip("''")
                     # Извлекаем наименование файлов
                     files = self.config[section]["files"].strip('"').split()
+                    cleaned_files = [(file.replace("'", "")).replace(",","") for file in files]
                     # Создаем словарь куда помещаем данные
                     self.files_and_path.update({
                                 section: {
                                     "path": path,
-                                    "files": files
+                                    "files": cleaned_files
                                     }
                             })
             return self.files_and_path
         else:  # Иначе создание конфигурационного файла
             print("config файл отсутсвует!")
             string_excell_files: str = self.search_excell_files_in_root()
+            mark_str = ', '.join(
+                [f"'{file}'" for file in string_excell_files.split()])
             new_config_file = open(file_config_ini, "w")
             if string_excell_files != "":
                 new_config_file.write(textwrap.dedent("""
@@ -187,7 +190,7 @@ class ParserConfigToListOrCreateNew:
                 files = {}
                     """).format(
                         sce_workspace_dir,
-                        string_excell_files))
+                        mark_str))
             new_config_file.write(textwrap.dedent(
                 """
                 # Ниже представлен пример.
@@ -267,11 +270,7 @@ class SCESearchInExcellFiles:
     # Поиск во всех ячейках excel файла
     def search_in_all_cells(self, sheet, file_path, sheet_name):
         # Итерируемся по всем ячейкам в листе
-        for row in tqdm(
-                sheet.iter_rows(),
-                desc=f"Имя листа: {sheet_name}",
-                ascii=True, leave=False
-                ):
+        for row in sheet.iter_rows():
             for cell in row:
                 # Проверяем
                 # совпадает ли значение ячейки с искомыми

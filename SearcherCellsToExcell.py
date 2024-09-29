@@ -303,10 +303,11 @@ class SCESearchInExcellFiles:
                 if result == "stop":
                     break
                 elif result == "continue":
-                    self.table_str = ""
+                    self.sv_tbl_str = ""
                     continue
                 elif result == "save":
-                    self.SCECommands.save_last_result_in_file(self.table_str)
+                    # сохраняем последний результат в файл
+                    self.SCECommands.save_last_result_in_file(self.sv_tbl_str)
                     continue
                 elif result is None:
                     pass
@@ -316,7 +317,9 @@ class SCESearchInExcellFiles:
                     ["Имя файла", "Название Листа", "Координаты Ячейки"])
                 for row in locations:
                     table.add_row(row)
-                self.table_str = table.get_string()
+                # Сохраняем в переменную чтобы можно было если нужно
+                # сохранить результат в файл
+                self.sv_tbl_str = table.get_string()
                 if locations:
                     print(self.str_found)
                     print(table)

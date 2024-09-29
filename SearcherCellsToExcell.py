@@ -249,7 +249,7 @@ class SCESearchInExcellFiles:
             "|===========================================================|"
         self.str_not_found = \
             "\nДанное значение не обнаруженно в (.xlsx) файлах."
-        self.table_str: str = ""
+        self.sv_tbl_str: str = ""
 
     # Поиск во всех листах excel файла
     def search_in_all_sheets(self, workbook, file_path):

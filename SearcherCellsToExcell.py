@@ -96,7 +96,7 @@ class SCEComands:
     # Остановка и выход из программы
     def command_sce_stop(self):
         print(self.stop_text)
-        sleep(0.2)
+        sleep(0.5)
         return sys.exit()
 
     # Вывод всех имеющихся команд на консоль (помощь)

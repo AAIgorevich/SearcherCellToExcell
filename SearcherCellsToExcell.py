@@ -34,18 +34,19 @@ class SCEComands:
         введите: 'searcher -help'.""").strip()
         self.stop_text = "Досвидания. Запускайте еще!"
         self.help_text = textwrap.dedent(f"""
-        ╔═══════════════════════════════════════════════╗
-        ║                                               ║
-        ║ Доступные команды:                            ║
-        ║ ============================================= ║
-        ║ searcher -hi   : Приветствие                  ║
-        ║ searcher -stop : Выйти из программы           ║
-        ║ searcher -info : Информация о программе       ║
-        ║ searcher -help : Показать этот список команд  ║
-        ║ searcher -d -fs: Удалить {name_config_file}    ║
-        ║ searcher -save : Сохранить в файл, последний  ║
-        ║                   выведеный результат поиска. ║
-        ╚═══════════════════════════════════════════════╝
+        ╔═══════════════════════════════════════════════════╗
+        ║                                                   ║
+        ║ Доступные команды:                                ║
+        ║ ================================================= ║
+        ║ searcher -hi      : Приветствие                   ║
+        ║ searcher -stop    : Выйти из программы            ║
+        ║ searcher -info    : Информация о программе        ║
+        ║ searcher -help    : Показать этот список команд   ║
+        ║ searcher -d config: Удалить {name_config_file}     ║
+        ║ searcher -clear    : Очистка выводу консоли       ║
+        ║ searcher -save    : Сохранить в файл, последний   ║
+        ║                   выведеный результат поиска.     ║
+        ╚═══════════════════════════════════════════════════╝
         """).strip()
         self.hi_text = textwrap.dedent("""
         ╔════════════════════════════════════════════════════╗
@@ -90,6 +91,8 @@ class SCEComands:
             return "continue"
         elif search_value == "searcher -save":
             return "save"
+        elif search_value == "searcher -clear":
+            return "clear"
         # Если команда не распознана, возвращаем None, чтобы продолжить поиск
         return None
 
@@ -134,6 +137,9 @@ class SCEComands:
                 print("Файл успешно сохранен!")
         except Exception as error:
             print("Ошибка сохрания в файл: " + error)
+
+    def cleanup_console_output(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
 
 
 # Класс в котором присутсвуют инструменты для извлечение данных из конфиг файла
@@ -307,6 +313,9 @@ class SCESearchInExcellFiles:
                 elif result == "save":
                     # сохраняем последний результат в файл
                     self.SCECommands.save_last_result_in_file(self.sv_tbl_str)
+                    continue
+                elif result == "clear":
+                    self.SCECommands.cleanup_console_output()
                     continue
                 elif result is None:
                     pass

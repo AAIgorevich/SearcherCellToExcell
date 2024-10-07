@@ -74,25 +74,22 @@ class SCEComands:
 
     # Вызов команд
     def call_comands(self, search_value) -> str | None:
-        if search_value == "searcher -stop":
-            self.command_sce_stop()
-            return "stop"
-        elif search_value == "searcher -help":
-            self.command_sce_help()
-            return "continue"
-        elif search_value == "searcher -hi":
-            self.command_sce_hi()
-            return "continue"
-        elif search_value == "searcher -info":
-            self.command_sce_info()
-            return "continue"
-        elif search_value == "searcher -d config":
-            self.remove_config_file()
-            return "continue"
-        elif search_value == "searcher -save":
-            return "save"
-        elif search_value == "searcher -clear":
-            return "clear"
+        commands: dict = {
+            "searcher -stop": (self.command_sce_stop, "stop"),
+            "searcher -help": (self.command_sce_help, "continue"),
+            "searcher -hi": (self.command_sce_hi, "continue"),
+            "searcher -info": (self.command_sce_info, "continue"),
+            "searcher -d config": (self.remove_config_file, "continue"),
+            "searcher -save": (lambda: None, "save"),
+            "searcher -clear": (self.cleanup_console_output, "continue"),
+            "searcher -clear -true": (lambda: None, True),
+            "searcher -clear -false": (lambda: None, False)
+        }
+        command = commands.get(search_value)
+        if command:
+            func, result = command
+            func()
+            return result
         # Если команда не распознана, возвращаем None, чтобы продолжить поиск
         return None
 
@@ -108,6 +105,8 @@ class SCEComands:
 
     # Приветствие на консоль
     def command_sce_hi(self):
+        print(self.SCE_greeting)
+        sleep(1)
         return print(self.hi_text)
 
     # Информациия о программе
@@ -251,7 +250,7 @@ class SCESearchInExcellFiles:
         self.list_path: list = PCtL.parse_dict_to_list()
         self.SCECommands = SCEComands()
         self.store_results: list = []
-        self.input_search_value: str = ...
+        self.user_input: str = ...
         self.str_found = \
             "\nНайдены совпадения в (.xlsx) файлах с вашем значением: "
         self.str_stroke = \
@@ -259,6 +258,11 @@ class SCESearchInExcellFiles:
         self.str_not_found = \
             "\nДанное значение не обнаруженно в (.xlsx) файлах."
         self.sv_tbl_str: str = ""
+        self.clear_console_pointer: bool = False
+        self.names_columns = [
+                        "Имя файла",
+                        "Название Листа",
+                        "Координаты Ячейки"]
 
     # Поиск во всех листах excel файла
     def search_in_all_sheets(self, workbook, file_path):
@@ -281,7 +285,7 @@ class SCESearchInExcellFiles:
                 # Проверяем
                 # совпадает ли значение ячейки с искомыми
                 cell_value = str(cell.value)
-                if cell_value == self.input_search_value:
+                if cell_value == self.user_input:
                     # Сохраняем путь к
                     # файлу, имени листа и адреса ячейки
                     self.store_results.append(
@@ -303,32 +307,38 @@ class SCESearchInExcellFiles:
         try:
             self.SCECommands.first_init_command_help()
             while True:
-                self.input_search_value = str(input("Ваше значение: "))
-                result = self.SCECommands.call_comands(self.input_search_value)
-                if result == "stop":
+                self.user_input = str(input("Ваше значение: "))
+                command_result = \
+                    self.SCECommands.call_comands(self.user_input)
+                if command_result == "stop":
                     break
-                elif result == "continue":
+                if command_result == "continue":
                     self.sv_tbl_str = ""
                     continue
-                elif result == "save":
+                if command_result == "save":
                     # сохраняем последний результат в файл
                     self.SCECommands.save_last_result_in_file(self.sv_tbl_str)
                     continue
-                elif result == "clear":
-                    self.SCECommands.cleanup_console_output()
+                if isinstance(command_result, bool):
+                    self.clear_console_pointer = command_result
                     continue
-                elif result is None:
+                if command_result is None:
                     pass
+                is_clear: dict = {
+                    True: (self.SCECommands.cleanup_console_output),
+                    False: (lambda: None)
+                }
+                func = is_clear.get(self.clear_console_pointer)
+                func()
                 self.search_file_and_load_workbook()
-                locations = self.store_results
-                table = PrettyTable(
-                    ["Имя файла", "Название Листа", "Координаты Ячейки"])
-                for row in locations:
+                table = PrettyTable(self.names_columns)
+                for row in self.store_results:
                     table.add_row(row)
                 # Сохраняем в переменную чтобы можно было если нужно
                 # сохранить результат в файл
+
                 self.sv_tbl_str = table.get_string()
-                if locations:
+                if self.store_results:
                     print(self.str_found)
                     print(table)
                 else:

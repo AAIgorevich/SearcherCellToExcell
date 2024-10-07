@@ -332,11 +332,9 @@ class SCESearchInExcellFiles:
                 func()
                 self.search_file_and_load_workbook()
                 table = PrettyTable(self.names_columns)
-                for row in self.store_results:
-                    table.add_row(row)
+                [table.add_row(row) for row in self.store_results]
                 # Сохраняем в переменную чтобы можно было если нужно
                 # сохранить результат в файл
-
                 self.sv_tbl_str = table.get_string()
                 if self.store_results:
                     print(self.str_found)

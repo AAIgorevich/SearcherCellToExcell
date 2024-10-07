@@ -34,19 +34,21 @@ class SCEComands:
         введите: 'searcher -help'.""").strip()
         self.stop_text = "Досвидания. Запускайте еще!"
         self.help_text = textwrap.dedent(f"""
-        ╔═══════════════════════════════════════════════════╗
-        ║                                                   ║
-        ║ Доступные команды:                                ║
-        ║ ================================================= ║
-        ║ searcher -hi      : Приветствие                   ║
-        ║ searcher -stop    : Выйти из программы            ║
-        ║ searcher -info    : Информация о программе        ║
-        ║ searcher -help    : Показать этот список команд   ║
-        ║ searcher -d config: Удалить {name_config_file}          ║
-        ║ searcher -clear   : Очистка выводу консоли        ║
-        ║ searcher -save    : Сохранить в файл, последний   ║
-        ║                   выведеный результат поиска.     ║
-        ╚═══════════════════════════════════════════════════╝
+        ╔═══════════════════════════════════════════════════════╗
+        ║                                                       ║
+        ║ Доступные команды:                                    ║
+        ║ ===================================================== ║
+        ║ searcher -hi          : Приветствие                   ║
+        ║ searcher -stop        : Выйти из программы            ║
+        ║ searcher -info        : Информация о программе        ║
+        ║ searcher -help        : Показать этот список команд   ║
+        ║ searcher -d config    : Удалить {name_config_file}          ║
+        ║ searcher -clear       : Очистка выводу консоли        ║
+        ║ searcher -clear -true : Очищать всегда консоль - вкл  ║
+        ║ searcher -clear -clear: Очищать всегда консоль - выкл ║
+        ║ searcher -save        : Сохранить в файл, последний   ║
+        ║                         выведеный результат поиска.   ║
+        ╚═══════════════════════════════════════════════════════╝
         """).strip()
         self.hi_text = textwrap.dedent("""
         ╔════════════════════════════════════════════════════╗
@@ -324,11 +326,10 @@ class SCESearchInExcellFiles:
                     continue
                 if command_result is None:
                     pass
-                is_clear: dict = {
+                func = {
                     True: (self.SCECommands.cleanup_console_output),
                     False: (lambda: None)
-                }
-                func = is_clear.get(self.clear_console_pointer)
+                }.get(self.clear_console_pointer)
                 func()
                 self.search_file_and_load_workbook()
                 table = PrettyTable(self.names_columns)

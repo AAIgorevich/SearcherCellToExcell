@@ -10,7 +10,7 @@ import configparser
 
 version = "1.2"
 author = "AAIgorevich"
-name_config_file = 'path_settings.ini'
+name_config_file = 'confpath.ini'
 name_file_save_result = "saved_result.txt"
 
 
@@ -42,8 +42,8 @@ class SCEComands:
         ║ searcher -stop    : Выйти из программы            ║
         ║ searcher -info    : Информация о программе        ║
         ║ searcher -help    : Показать этот список команд   ║
-        ║ searcher -d config: Удалить {name_config_file}     ║
-        ║ searcher -clear    : Очистка выводу консоли       ║
+        ║ searcher -d config: Удалить {name_config_file}          ║
+        ║ searcher -clear   : Очистка выводу консоли        ║
         ║ searcher -save    : Сохранить в файл, последний   ║
         ║                   выведеный результат поиска.     ║
         ╚═══════════════════════════════════════════════════╝

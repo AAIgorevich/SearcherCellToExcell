@@ -165,7 +165,7 @@ class ParserConfigToListOrCreateNew:
                     path = self.config[section]["path"].strip("''")
                     # Извлекаем наименование файлов
                     files = self.config[section]["files"].strip('"').split()
-                    cleaned_files = [(file.replace("'", "")).replace(",","") for file in files]
+                    cleaned_files = [(file.replace("'", "")).replace(",", "") for file in files]
                     # Создаем словарь куда помещаем данные
                     self.files_and_path.update({
                                 section: {

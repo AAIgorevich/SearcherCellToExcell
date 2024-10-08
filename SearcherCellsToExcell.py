@@ -125,7 +125,7 @@ class SCEComands:
     def remove_config_file(self) -> None:
         if os.path.exists(file_config_ini):
             os.remove(file_config_ini)
-            print("Файд был успешно удален!")
+            print("Файл был успешно удален!")
         else:
             print("Невозможно удалить конфиг файл, по причине его отсутствия!")
 

@@ -81,9 +81,9 @@ class SCEComands:
             "searcher -help": (self.command_sce_help, "continue"),
             "searcher -hi": (self.command_sce_hi, "continue"),
             "searcher -info": (self.command_sce_info, "continue"),
-            "searcher -d config": (self.remove_config_file, "continue"),
+            "searcher -d config": (self.command_remove_config_file, "continue"),
             "searcher -save": (lambda: None, "save"),
-            "searcher -clear": (self.cleanup_console_output, "continue"),
+            "searcher -clear": (self.command_cleanup_console_output, "continue"),
             "searcher -clear -true": (lambda: None, True),
             "searcher -clear -false": (lambda: None, False)
         }
@@ -122,7 +122,7 @@ class SCEComands:
         return print(self.hint_help)
 
     # Комагда удаления конфиг файла
-    def remove_config_file(self) -> None:
+    def command_remove_config_file(self) -> None:
         if os.path.exists(file_config_ini):
             os.remove(file_config_ini)
             print("Файл был успешно удален!")
@@ -139,7 +139,7 @@ class SCEComands:
         except Exception as error:
             print("Ошибка сохрания в файл: " + error)
 
-    def cleanup_console_output(self):
+    def command_cleanup_console_output(self):
         os.system('cls' if os.name == 'nt' else 'clear')
 
 
@@ -327,7 +327,7 @@ class SCESearchInExcellFiles:
                 if command_result is None:
                     pass
                 func = {
-                    True: (self.SCECommands.cleanup_console_output),
+                    True: (self.SCECommands.command_cleanup_console_output),
                     False: (lambda: None)
                 }.get(self.clear_console_pointer)
                 func()

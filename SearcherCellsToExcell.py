@@ -164,8 +164,13 @@ class ParserConfigToListOrCreateNew:
                     # Извлекаем путь
                     path = self.config[section]["path"].strip("''")
                     # Извлекаем наименование файлов
-                    files = self.config[section]["files"].strip('"').split()
-                    cleaned_files = [(file.replace("'", "")).replace(",", "") for file in files]
+                    files = self.config[section]["files"]\
+                        .strip("'").split(", ")
+                    cleaned_files = \
+                        [
+                            (file.replace("'", ""))
+                            .replace(",", "") for file in files
+                        ]
                     # Создаем словарь куда помещаем данные
                     self.files_and_path.update({
                                 section: {
@@ -176,11 +181,14 @@ class ParserConfigToListOrCreateNew:
             return self.files_and_path
         else:  # Иначе создание конфигурационного файла
             print("config файл отсутсвует!")
-            string_excell_files: str = self.search_excell_files_in_root()
-            mark_str = ', '.join(
-                [f"'{file}'" for file in string_excell_files.split()])
+            mark_str = ", ".join(
+                [
+                    f"'{element}'"
+                    for element in self.search_excell_files_in_root()
+                ]
+                )
             new_config_file = open(file_config_ini, "w")
-            if string_excell_files != "":
+            if self.search_excell_files_in_root():
                 new_config_file.write(textwrap.dedent("""
                 [ListGroups]
                     """).strip()
@@ -199,7 +207,7 @@ class ParserConfigToListOrCreateNew:
                         sce_workspace_dir,
                         mark_str))
             new_config_file.write(textwrap.dedent(
-                """
+                r"""
                 # Ниже представлен пример.
                 # Раскоментируя его убрав "#",
                 # Вы можете дополнить его или удалить
@@ -237,9 +245,8 @@ class ParserConfigToListOrCreateNew:
         # Итерируемся по всем файлам в указанной папке
         for filename in os.listdir(sce_workspace_dir):
             if filename.endswith(".xlsx"):  # ! <= TODO *for old formats
-                list_excell_files.append(filename)
-        string_excell_files: str = " ".join(list_excell_files)
-        return string_excell_files
+                list_excell_files.append(f"{filename}")
+        return list_excell_files
 
 
 # Боевой класс.

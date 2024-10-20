@@ -18,7 +18,7 @@ name_file_save_result = "saved_result.txt"
 class SCEComands:
     # data text commands
     def __init__(self) -> None:
-        self.SCE_greeting = textwrap.dedent(r"""
+        self.SCE_logo = textwrap.dedent(r"""
         ╔══════════════════════════════╗
         ║        ┌/\───/\┐             ║
         ║        │ SCtE  │             ║
@@ -107,7 +107,7 @@ class SCEComands:
 
     # Приветствие на консоль
     def command_sce_hi(self):
-        print(self.SCE_greeting)
+        print(self.SCE_logo)
         sleep(1)
         return print(self.hi_text)
 
@@ -117,8 +117,10 @@ class SCEComands:
 
     # Подсказка для пользователей выводится единожды
     def first_init_command_help(self):
-        print(self.SCE_greeting)
-        sleep(0.2)
+        print(self.SCE_logo)
+        sleep(0.9)
+        print(self.hi_text)
+        sleep(0.9)
         return print(self.hint_help)
 
     # Комагда удаления конфиг файла

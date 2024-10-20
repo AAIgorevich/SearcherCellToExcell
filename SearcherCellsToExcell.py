@@ -41,11 +41,11 @@ class SCEComands:
         ║ searcher -hi          : Приветствие                   ║
         ║ searcher -stop        : Выйти из программы            ║
         ║ searcher -info        : Информация о программе        ║
-        ║ searcher -help        : Показать этот список команд   ║
+        ║ searcher -help        : Показать список команд        ║
         ║ searcher -d config    : Удалить {name_config_file}          ║
         ║ searcher -clear       : Очистка выводу консоли        ║
         ║ searcher -clear -true : Очищать всегда консоль - вкл  ║
-        ║ searcher -clear -clear: Очищать всегда консоль - выкл ║
+        ║ searcher -clear -false: Очищать всегда консоль - выкл ║
         ║ searcher -save        : Сохранить в файл, последний   ║
         ║                         выведеный результат поиска.   ║
         ╚═══════════════════════════════════════════════════════╝

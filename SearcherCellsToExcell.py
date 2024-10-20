@@ -81,9 +81,11 @@ class SCEComands:
             "searcher -help": (self.command_sce_help, "continue"),
             "searcher -hi": (self.command_sce_hi, "continue"),
             "searcher -info": (self.command_sce_info, "continue"),
-            "searcher -d config": (self.command_remove_config_file, "continue"),
+            "searcher -d config": (
+                self.command_remove_config_file, "continue"),
             "searcher -save": (lambda: None, "save"),
-            "searcher -clear": (self.command_cleanup_console_output, "continue"),
+            "searcher -clear": (
+                self.command_cleanup_console_output, "continue"),
             "searcher -clear -true": (lambda: None, True),
             "searcher -clear -false": (lambda: None, False)
         }

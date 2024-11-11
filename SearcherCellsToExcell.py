@@ -238,7 +238,7 @@ class ParserConfigToListOrCreateNew:
             ]
         else:
             print("Конфиг файл не заполнен!")
-            sleep(5)
+            sleep(3)
             exit()
         _result = self.store_result
         return _result

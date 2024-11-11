@@ -280,10 +280,11 @@ class SCESearchInExcellFiles:
     # Поиск во всех листах excel файла
     def search_in_all_sheets(self, workbook, file_path):
         # Итерируемся по всем листам книги
+        file_name = os.path.basename(file_path)
         for sheet_name in tqdm(
                 workbook.sheetnames,
                 # Вывод файлов которые были просмотренны
-                desc=f"Просмотр файла {file_path}.",
+                desc=f"Просмотр файла {file_name}.",
                 colour="#FFFF00",
                 ascii=True, leave=False
                 ):

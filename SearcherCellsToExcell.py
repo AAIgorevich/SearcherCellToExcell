@@ -289,6 +289,10 @@ class SCESearchInExcellFiles:
                 ascii=True, leave=False
                 ):
             sheet = workbook[sheet_name]
+            # Проверка на листы типа chart
+            if sheet.title.startswith('Chart'):
+                print(f"Пропускаем лист: {sheet.title}")
+                continue
             self.search_in_all_cells(sheet, file_path, sheet_name)
 
     # Поиск во всех ячейках excel файла

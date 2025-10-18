@@ -7,6 +7,29 @@ from time import sleep
 import textwrap
 import configparser
 
+from constants import (
+    BORDER_LINE_TEXT,
+    COLOUR_TEXT,
+    CONF_FILE_IS_NOT_EXIST, 
+    CONF_FILE_NOT_FILL_OUT,
+    CONTINUE_TEXT, 
+    CREATED_NEW_CONF_FILL_OUT_TEXT, 
+    DESCRIPTION_IN_CONF_TEXT, 
+    FILES_TEXT,
+    FIND_SELL_LIKE_U_XL, 
+    FORMAT_CONF_TEXT, 
+    HELP_IN_CONF_TEXT, 
+    PATH_TEXT,
+    READING_FILE_TEXT,
+    SAMPLE_NAME_COLUMS,
+    SAVE_TEXT,
+    SKIP_LIST_TEXT,
+    STOP_TEXT,
+    TYPE_CHART_TEXT,
+    U_VALUE_TEXT,
+    VALUE_NOT_FIND_TEXT, 
+    XL_FORMAT_TEXT)
+
 
 # Класс в котором присутсвуют инструменты для извлечение данных из конфиг файла
 # или создания собственного конфига файла если последний отсутсвует
@@ -27,10 +50,9 @@ class ParserConfigToListOrCreateNew:
             for section in self.config.sections():
                 if self.config[section].values():
                     # Извлекаем путь
-                    path = self.config[section]["path"].strip("''")
+                    path = self.config[section][PATH_TEXT].strip("''")
                     # Извлекаем наименование файлов
-                    files = self.config[section]["files"]\
-                        .strip("'").split(", ")
+                    files = self.config[section][FILES_TEXT].strip("'").split(", ")
                     cleaned_files = \
                         [
                             (file.replace("'", ""))
@@ -39,13 +61,13 @@ class ParserConfigToListOrCreateNew:
                     # Создаем словарь куда помещаем данные
                     self.files_and_path.update({
                                 section: {
-                                    "path": path,
-                                    "files": cleaned_files
+                                    PATH_TEXT: path,
+                                    FILES_TEXT: cleaned_files
                                     }
                             })
             return self.files_and_path
         else:  # Иначе создание конфигурационного файла
-            print("config файл отсутсвует!")
+            print(CONF_FILE_IS_NOT_EXIST)
             mark_str = ", ".join(
                 [
                     f"'{element}'"
@@ -54,35 +76,15 @@ class ParserConfigToListOrCreateNew:
                 )
             new_config_file = open(file_config_ini, "w")
             if self.search_excell_files_in_root():
-                new_config_file.write(textwrap.dedent("""
-                # "ListGroups.GroupFile" Создался по причине того,
-                # что в корневой папке программы присутсвуют файлы,
-                # в которых можно осуществить поиск ячеек в Excell файлах.
-                #  Если вы не желаете искать в этих файлах указанных в
-                # "files", то просто удалите все начиная:
-                # от "ListGroups.GroupFile", заканчивая "files"(включая).
-                    """).strip()
+                new_config_file.write(textwrap.dedent(DESCRIPTION_IN_CONF_TEXT).strip()
                     )
-                new_config_file.write(textwrap.dedent("""
-                [ListGroups]
-                [ListGroups.GroupFile]
-                path = {}
-                files = {}
-                    """).format(
+                new_config_file.write(textwrap.dedent(FORMAT_CONF_TEXT).format(
                         sce_workspace_dir,
                         mark_str))
             new_config_file.write(textwrap.dedent(
-                r"""
-                # Ниже представлен пример.
-                # Раскоментируя его убрав "#",
-                # Вы можете дополнить его или удалить
-                # по собственному разумению.
-                # [ListGroups.GroupFile1]
-                # path = 'C:\Сюда_напишите_путь_к_файлу'
-                # files = example_1.xlsx example_2.xlsx example_3.xlsx
-                """).strip())
+                HELP_IN_CONF_TEXT).strip())
             new_config_file.close()
-            print("Создан новый конфиг файл пожалуйста заполните его!")
+            print(CREATED_NEW_CONF_FILL_OUT_TEXT)
             sleep(5)
             exit()
 
@@ -93,12 +95,12 @@ class ParserConfigToListOrCreateNew:
         # Проверяем пустой словарь или нет
         if _file_path_dict:
             self.store_result = [
-                f"{group['path']}\\{file}"
+                f"{group[PATH_TEXT]}\\{file}"
                 for group in _file_path_dict.values()
-                for file in group['files']
+                for file in group[FILES_TEXT]
             ]
         else:
-            print("Конфиг файл не заполнен!")
+            print(CONF_FILE_NOT_FILL_OUT)
             sleep(3)
             exit()
         _result = self.store_result
@@ -109,7 +111,7 @@ class ParserConfigToListOrCreateNew:
         list_excell_files: list = []
         # Итерируемся по всем файлам в указанной папке
         for filename in os.listdir(sce_workspace_dir):
-            if filename.endswith(".xlsx"):  # ! <= TODO *for old formats
+            if filename.endswith(XL_FORMAT_TEXT):  # ! <= TODO *for old formats
                 list_excell_files.append(f"{filename}")
         return list_excell_files
 
@@ -125,18 +127,12 @@ class SCESearchInExcellFiles:
         self.SCECommands = SCEComands()
         self.store_results: list = []
         self.user_input: str = ...
-        self.str_found = \
-            "\nНайдены совпадения в (.xlsx) файлах с вашем значением: "
-        self.str_stroke = \
-            "|===========================================================|"
-        self.str_not_found = \
-            "\nДанное значение не обнаруженно в (.xlsx) файлах."
+        self.str_found = FIND_SELL_LIKE_U_XL
+        self.str_stroke = BORDER_LINE_TEXT
+        self.str_not_found = VALUE_NOT_FIND_TEXT
         self.sv_tbl_str: str = ""
         self.clear_console_pointer: bool = False
-        self.names_columns = [
-                        "Имя файла",
-                        "Название Листа",
-                        "Координаты Ячейки"]
+        self.names_columns = SAMPLE_NAME_COLUMS
 
     # Поиск во всех листах excel файла
     def search_in_all_sheets(self, workbook, file_path):
@@ -145,14 +141,14 @@ class SCESearchInExcellFiles:
         for sheet_name in tqdm(
                 workbook.sheetnames,
                 # Вывод файлов которые были просмотренны
-                desc=f"Просмотр файла {file_name}.",
-                colour="#FFFF00",
+                desc=READING_FILE_TEXT.format(file_name),
+                colour= COLOUR_TEXT,
                 ascii=True, leave=False
                 ):
             sheet = workbook[sheet_name]
             # Проверка на листы типа chart
-            if sheet.title.startswith('Chart'):
-                print(f"Пропускаем лист: {sheet.title}")
+            if sheet.title.startswith(TYPE_CHART_TEXT):
+                print(SKIP_LIST_TEXT.format(sheet.title))
                 continue
             self.search_in_all_cells(sheet, file_path, sheet_name)
 
@@ -186,15 +182,15 @@ class SCESearchInExcellFiles:
         try:
             self.SCECommands._first_init_command_help()
             while True:
-                self.user_input = str(input("Ваше значение: "))
+                self.user_input = str(input(U_VALUE_TEXT))
                 command_result = \
                     self.SCECommands._call_comands(self.user_input)
-                if command_result == "stop":
+                if command_result == STOP_TEXT:
                     break
-                if command_result == "continue":
+                if command_result == CONTINUE_TEXT:
                     self.sv_tbl_str = ""
                     continue
-                if command_result == "save":
+                if command_result == SAVE_TEXT:
                     # сохраняем последний результат в файл
                     self.SCECommands._save_last_result_in_file(self.sv_tbl_str)
                     continue

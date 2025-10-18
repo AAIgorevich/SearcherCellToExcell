@@ -8,3 +8,4 @@
 *.txt
 icon
 *.pyc
+__pycache__
